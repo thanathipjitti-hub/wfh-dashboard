@@ -71,6 +71,30 @@ body{font-family:'Prompt',sans-serif;background:var(--bg);color:var(--text);min-
 .fs{min-width:155px;cursor:pointer}.fi{min-width:180px}.fd{min-width:128px;cursor:pointer}
 .sep{width:1px;height:20px;background:var(--border);flex-shrink:0}
 .sp{flex:1;min-width:4px}
+/* ── MULTI-SELECT ── */
+.ms-wrap{position:relative}
+.ms-btn{font-family:inherit;font-size:.82rem;padding:7px 28px 7px 10px;
+  border:1.5px solid var(--border);border-radius:7px;background:#fff;color:var(--text);
+  cursor:pointer;min-width:175px;max-width:220px;text-align:left;position:relative;
+  transition:all .2s;outline:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ms-btn:hover,.ms-btn.open{border-color:var(--navy);box-shadow:0 0 0 3px rgba(26,26,110,.1)}
+.ms-arr{position:absolute;right:9px;top:50%;transform:translateY(-50%);pointer-events:none;
+  font-size:.65rem;color:var(--muted);transition:transform .2s}
+.ms-btn.open .ms-arr{transform:translateY(-50%) rotate(180deg)}
+.ms-panel{position:absolute;top:calc(100% + 5px);left:0;z-index:500;background:#fff;
+  border:1.5px solid var(--navy);border-radius:9px;
+  box-shadow:0 8px 28px rgba(26,26,110,.18);min-width:230px;max-height:280px;
+  overflow-y:auto;padding:6px 0;display:none}
+.ms-panel.open{display:block}
+.ms-item{display:flex;align-items:center;gap:9px;padding:7px 14px;cursor:pointer;
+  font-size:.82rem;color:var(--text);transition:background .1s;user-select:none;line-height:1.4}
+.ms-item:hover{background:rgba(26,26,110,.05)}
+.ms-item input[type=checkbox]{accent-color:var(--navy);width:15px;height:15px;
+  cursor:pointer;flex-shrink:0}
+.ms-all-item{font-weight:700;color:var(--navy);border-bottom:1px solid var(--blight)}
+.ms-badge{display:inline-flex;align-items:center;justify-content:center;
+  background:var(--navy);color:#fff;border-radius:10px;font-size:.62rem;
+  font-weight:700;padding:1px 6px;margin-left:4px;vertical-align:middle}
 .btn-r{font-family:inherit;font-size:.78rem;padding:7px 12px;background:var(--blight);
   border:1.5px solid var(--border);border-radius:7px;cursor:pointer;color:var(--muted);
   transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:5px}
@@ -99,9 +123,9 @@ body{font-family:'Prompt',sans-serif;background:var(--bg);color:var(--text);min-
 .kpi-num{font-size:.65rem;font-weight:700;color:var(--navy);letter-spacing:.06em;text-transform:uppercase;
   background:rgba(200,168,75,.12);padding:3px 7px;border-radius:4px;border:1px solid rgba(200,168,75,.25);white-space:nowrap}
 .kv{font-size:1.85rem;font-weight:700;color:var(--navy);line-height:1;margin-bottom:5px}
-.kv-sm{font-size:.92rem;font-weight:700;color:var(--navy);line-height:1.4;margin-bottom:4px}
-.kl{font-size:.76rem;color:var(--muted)}
-.ks{font-size:.68rem;color:var(--silver);margin-top:3px;font-weight:300}
+.kv-sm{font-size:1.08rem;font-weight:700;color:var(--navy);line-height:1.4;margin-bottom:4px;word-break:break-word}
+.kl{font-size:.8rem;color:var(--muted)}
+.ks{font-size:.72rem;color:var(--silver);margin-top:3px;font-weight:300}
 
 /* ── CHARTS ── */
 .chart-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
@@ -123,17 +147,17 @@ body{font-family:'Prompt',sans-serif;background:var(--bg);color:var(--text);min-
 .stbl-title{font-size:.88rem;font-weight:600;color:var(--navy);display:flex;align-items:center;gap:7px}
 .stbl-meta{font-size:.74rem;color:var(--muted);background:var(--blight);padding:4px 10px;border-radius:5px}
 .stbl-wrap{overflow-x:auto;border-radius:8px;border:1px solid var(--border)}
-.stbl-wrap table{width:100%;border-collapse:collapse;font-size:.82rem}
+.stbl-wrap table{width:100%;border-collapse:collapse;font-size:.92rem}
 .stbl-wrap thead{background:linear-gradient(135deg,var(--navy),var(--royal))}
-.stbl-wrap th{padding:10px 14px;text-align:left;font-weight:600;
-  color:rgba(255,255,255,.85);font-size:.69rem;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
-.stbl-wrap td{padding:9px 14px;border-bottom:1px solid var(--blight);vertical-align:middle}
+.stbl-wrap th{padding:11px 14px;text-align:left;font-weight:600;
+  color:rgba(255,255,255,.9);font-size:.76rem;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
+.stbl-wrap td{padding:11px 14px;border-bottom:1px solid var(--blight);vertical-align:middle}
 .stbl-wrap tbody tr:last-child td{border-bottom:none}
 .gr-row{background:rgba(26,26,110,.04)!important}
 .gr-row td{font-weight:700;color:var(--navy);border-bottom:2px solid var(--border)!important}
 .gr-tag{display:inline-flex;align-items:center;gap:6px;
-  background:var(--navy);color:#fff;padding:3px 10px;border-radius:5px;font-size:.75rem;font-weight:700}
-.sub-dept{padding-left:32px!important;color:var(--muted);font-size:.8rem}
+  background:var(--navy);color:#fff;padding:3px 10px;border-radius:5px;font-size:.8rem;font-weight:700}
+.sub-dept{padding-left:32px!important;color:var(--muted);font-size:.87rem}
 .grp-toggle{background:none;border:1px solid rgba(26,26,110,.25);cursor:pointer;font-size:.7rem;
   color:var(--navy);padding:2px 6px;border-radius:4px;margin-right:7px;line-height:1.3;
   vertical-align:middle;transition:all .15s;user-select:none;font-family:inherit}
@@ -142,7 +166,7 @@ body{font-family:'Prompt',sans-serif;background:var(--bg);color:var(--text);min-
   padding:4px 10px;border-radius:5px;cursor:pointer;font-family:inherit;transition:all .2s;font-weight:600}
 .tbl-ctrl-btn:hover{background:var(--navy);color:#fff;border-color:var(--navy)}
 .num-cell{text-align:right!important;font-weight:600;color:var(--navy)}
-.num-cell-s{text-align:right!important;color:var(--muted);font-size:.78rem}
+.num-cell-s{text-align:right!important;color:var(--muted);font-size:.86rem}
 .total-row td{background:rgba(200,168,75,.07)!important;font-weight:700;color:var(--navy);
   border-top:2px solid rgba(200,168,75,.3)!important;border-bottom:none!important}
 
@@ -154,25 +178,25 @@ body{font-family:'Prompt',sans-serif;background:var(--bg);color:var(--text);min-
 .tt{font-size:.88rem;font-weight:600;color:var(--navy);display:flex;align-items:center;gap:7px}
 .tm{font-size:.74rem;color:var(--muted);background:var(--blight);padding:4px 10px;border-radius:5px}
 .tscr{overflow-x:auto;border-radius:8px;border:1px solid var(--border)}
-table{width:100%;border-collapse:collapse;font-size:.82rem}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
 thead{background:var(--navy)}
-th{padding:10px 13px;text-align:left;font-weight:600;color:rgba(255,255,255,.85);
-  font-size:.69rem;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
-td{padding:9px 13px;border-bottom:1px solid var(--blight);vertical-align:middle}
+th{padding:11px 13px;text-align:left;font-weight:600;color:rgba(255,255,255,.9);
+  font-size:.76rem;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
+td{padding:10px 13px;border-bottom:1px solid var(--blight);vertical-align:middle}
 tbody tr:last-child td{border-bottom:none}
 tbody tr:nth-child(even){background:#fafafe}
 tbody tr:hover{background:rgba(26,26,110,.03)}
-.eid{font-size:.78rem;font-family:'Courier New',monospace;color:var(--muted)}
-.en{font-weight:500;color:var(--text)}
-.gtag{display:inline-block;max-width:155px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-  font-size:.72rem;background:rgba(200,168,75,.1);color:#7a6030;
-  padding:3px 7px;border-radius:4px;border:1px solid rgba(200,168,75,.2)}
-.dtag{display:inline-block;max-width:165px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-  font-size:.72rem;background:rgba(26,26,110,.06);color:var(--navy);
-  padding:3px 7px;border-radius:4px;border:1px solid rgba(26,26,110,.1)}
-.mtag{font-size:.73rem;padding:3px 9px;border-radius:4px;font-weight:600;
+.eid{font-size:.82rem;font-family:'Courier New',monospace;color:var(--muted)}
+.en{font-weight:500;color:var(--text);font-size:.9rem}
+.gtag{display:inline-block;max-width:165px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  font-size:.78rem;background:rgba(200,168,75,.1);color:#7a6030;
+  padding:3px 8px;border-radius:4px;border:1px solid rgba(200,168,75,.2)}
+.dtag{display:inline-block;max-width:175px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  font-size:.78rem;background:rgba(26,26,110,.06);color:var(--navy);
+  padding:3px 8px;border-radius:4px;border:1px solid rgba(26,26,110,.1)}
+.mtag{font-size:.79rem;padding:3px 10px;border-radius:4px;font-weight:600;
   background:rgba(26,26,110,.07);color:var(--royal);border:1px solid rgba(26,26,110,.15);white-space:nowrap}
-.dttag{font-size:.73rem;padding:3px 9px;border-radius:4px;
+.dttag{font-size:.79rem;padding:3px 10px;border-radius:4px;
   background:rgba(46,46,168,.06);color:var(--royal);border:1px solid rgba(46,46,168,.15);white-space:nowrap}
 
 /* PAGINATION */
@@ -267,12 +291,32 @@ tbody tr:hover{background:rgba(26,26,110,.03)}
       <div class="sep"></div>
       <div class="fg">
         <span class="fl">🗂 กลุ่มงาน</span>
-        <select class="fs" id="fgrp" onchange="onGroupChange()"><option value="">— ทั้งหมด —</option></select>
+        <div class="ms-wrap" id="ms-wrap">
+          <button class="ms-btn" id="ms-btn" onclick="toggleMs(event)">
+            <span id="ms-label">— ทั้งหมด —</span><span class="ms-arr">▾</span>
+          </button>
+          <div class="ms-panel" id="ms-panel">
+            <label class="ms-item ms-all-item">
+              <input type="checkbox" id="ms-all" checked onchange="onMsAll(this)"> ทั้งหมด
+            </label>
+            <div id="ms-list"></div>
+          </div>
+        </div>
       </div>
       <div class="sep"></div>
       <div class="fg">
         <span class="fl">🏛 สังกัด</span>
-        <select class="fs" id="fd" onchange="af()"><option value="">— ทั้งหมด —</option></select>
+        <div class="ms-wrap" id="ms-dept-wrap">
+          <button class="ms-btn" id="ms-dept-btn" onclick="toggleMsDept(event)">
+            <span id="ms-dept-label">— ทั้งหมด —</span><span class="ms-arr">▾</span>
+          </button>
+          <div class="ms-panel" id="ms-dept-panel">
+            <label class="ms-item ms-all-item">
+              <input type="checkbox" id="ms-dept-all" checked onchange="onMsDeptAll(this)"> ทั้งหมด
+            </label>
+            <div id="ms-dept-list"></div>
+          </div>
+        </div>
       </div>
       <div class="sep"></div>
       <div class="fg">
@@ -370,10 +414,9 @@ tbody tr:hover{background:rgba(26,26,110,.03)}
           <thead>
             <tr>
               <th style="min-width:220px">กลุ่มงาน / สังกัด</th>
-              <th style="text-align:right;width:110px">ครั้ง WFH รวม</th>
-              <th style="text-align:right;width:90px">จำนวนคน</th>
-              <th style="text-align:right;width:90px">จำนวนครั้ง</th>
-              <th style="text-align:right;width:90px">เฉลี่ย/คน</th>
+              <th style="text-align:right;width:120px">ครั้ง WFH รวม</th>
+              <th style="text-align:right;width:100px">จำนวนคน</th>
+              <th style="text-align:right;width:100px">เฉลี่ย/คน</th>
             </tr>
           </thead>
           <tbody id="stbody"></tbody>
@@ -502,45 +545,150 @@ function switchTab(t){
 }
 function loadTab(t){tab=t;page=1;populateFilters();af();}
 
+/* ── MULTI-SELECT กลุ่มงาน + สังกัด ── */
+let selGroups=new Set(); // empty = all
+let selDepts=new Set();  // empty = all
+let dataDateMin='', dataDateMax=''; // ช่วงวันที่จาก data จริง
+
+function toggleMs(e){
+  e.stopPropagation();
+  const p=document.getElementById('ms-panel'), b=document.getElementById('ms-btn');
+  const open=p.classList.contains('open');
+  p.classList.toggle('open',!open); b.classList.toggle('open',!open);
+  if(!open) document.addEventListener('click',closeMsOut,{once:true,capture:true});
+}
+function closeMsOut(e){
+  if(!document.getElementById('ms-wrap').contains(e.target)){
+    document.getElementById('ms-panel').classList.remove('open');
+    document.getElementById('ms-btn').classList.remove('open');
+  } else {
+    document.addEventListener('click',closeMsOut,{once:true,capture:true});
+  }
+}
+function updateMsLabel(){
+  const lbl=document.getElementById('ms-label');
+  if(selGroups.size===0){lbl.innerHTML='— ทั้งหมด —';}
+  else if(selGroups.size===1){lbl.textContent=[...selGroups][0];}
+  else{lbl.innerHTML='เลือก <span class="ms-badge">'+selGroups.size+'</span> กลุ่ม';}
+}
+function onMsItem(cb){
+  if(cb.checked) selGroups.add(cb.value); else selGroups.delete(cb.value);
+  const allCbs=[...document.querySelectorAll('#ms-list input[type=checkbox]')];
+  const allEl=document.getElementById('ms-all');
+  allEl.checked=selGroups.size===0; allEl.indeterminate=selGroups.size>0&&selGroups.size<allCbs.length;
+  updateMsLabel(); selDepts.clear(); updateDeptFilter(allData[tab]); af();
+}
+function onMsAll(cb){
+  selGroups.clear();
+  document.querySelectorAll('#ms-list input[type=checkbox]').forEach(c=>c.checked=false);
+  cb.checked=true; cb.indeterminate=false;
+  updateMsLabel(); selDepts.clear(); updateDeptFilter(allData[tab]); af();
+}
+/* สังกัด multi-select */
+function toggleMsDept(e){
+  e.stopPropagation();
+  const p=document.getElementById('ms-dept-panel'), b=document.getElementById('ms-dept-btn');
+  const open=p.classList.contains('open');
+  p.classList.toggle('open',!open); b.classList.toggle('open',!open);
+  if(!open) document.addEventListener('click',closeMsDeptOut,{once:true,capture:true});
+}
+function closeMsDeptOut(e){
+  if(!document.getElementById('ms-dept-wrap').contains(e.target)){
+    document.getElementById('ms-dept-panel').classList.remove('open');
+    document.getElementById('ms-dept-btn').classList.remove('open');
+  } else {
+    document.addEventListener('click',closeMsDeptOut,{once:true,capture:true});
+  }
+}
+function updateDeptLabel(){
+  const lbl=document.getElementById('ms-dept-label');
+  if(selDepts.size===0){lbl.innerHTML='— ทั้งหมด —';}
+  else if(selDepts.size===1){lbl.textContent=[...selDepts][0];}
+  else{lbl.innerHTML='เลือก <span class="ms-badge">'+selDepts.size+'</span> สังกัด';}
+}
+function onMsDeptItem(cb){
+  if(cb.checked) selDepts.add(cb.value); else selDepts.delete(cb.value);
+  const allCbs=[...document.querySelectorAll('#ms-dept-list input[type=checkbox]')];
+  const allEl=document.getElementById('ms-dept-all');
+  allEl.checked=selDepts.size===0; allEl.indeterminate=selDepts.size>0&&selDepts.size<allCbs.length;
+  updateDeptLabel(); af();
+}
+function onMsDeptAll(cb){
+  selDepts.clear();
+  document.querySelectorAll('#ms-dept-list input[type=checkbox]').forEach(c=>c.checked=false);
+  cb.checked=true; cb.indeterminate=false;
+  updateDeptLabel(); af();
+}
+function populateDeptMs(depts){
+  // keep selections that still exist in new list
+  const prevSel=new Set([...selDepts].filter(d=>depts.includes(d)));
+  selDepts=prevSel;
+  const list=document.getElementById('ms-dept-list'); list.innerHTML='';
+  depts.forEach(d=>{
+    const lbl=document.createElement('label'); lbl.className='ms-item';
+    const cb=document.createElement('input'); cb.type='checkbox'; cb.value=d;
+    cb.checked=selDepts.has(d);
+    cb.addEventListener('change',function(){onMsDeptItem(this);});
+    lbl.appendChild(cb); lbl.appendChild(document.createTextNode(' '+d));
+    list.appendChild(lbl);
+  });
+  const allEl=document.getElementById('ms-dept-all');
+  allEl.checked=selDepts.size===0; allEl.indeterminate=selDepts.size>0&&selDepts.size<depts.length;
+  updateDeptLabel();
+}
+
+function populateGrpMs(groups){
+  selGroups.clear();
+  const list=document.getElementById('ms-list'); list.innerHTML='';
+  groups.forEach(g=>{
+    const lbl=document.createElement('label'); lbl.className='ms-item';
+    const cb=document.createElement('input'); cb.type='checkbox'; cb.value=g;
+    cb.addEventListener('change',function(){onMsItem(this);});
+    lbl.appendChild(cb); lbl.appendChild(document.createTextNode(' '+g));
+    list.appendChild(lbl);
+  });
+  document.getElementById('ms-all').checked=true;
+  document.getElementById('ms-all').indeterminate=false;
+  updateMsLabel();
+}
+
 /* ── FILTERS ── */
 function populateFilters(){
   const d=allData[tab];
   const groups=[...new Set(d.map(r=>r.group))].filter(Boolean).sort((a,b)=>a.localeCompare(b,'th'));
   const months=[...new Set(d.map(r=>r.month))].filter(Boolean).sort((a,b)=>{const ai=MO.indexOf(a),bi=MO.indexOf(b);return ai-bi;});
   const sel=(id,arr)=>{const el=document.getElementById(id);el.innerHTML='<option value="">— ทั้งหมด —</option>';arr.forEach(x=>{const o=document.createElement('option');o.value=o.textContent=x;el.appendChild(o);});};
-  sel('fgrp',groups); sel('fm',months);
-  document.getElementById('si').value=''; document.getElementById('fdf').value=''; document.getElementById('fdt').value='';
+  populateGrpMs(groups); sel('fm',months);
+  document.getElementById('si').value='';
+  // หาช่วงวันที่จาก data จริง
+  const dates=d.map(r=>r.dateObj).filter(Boolean);
+  if(dates.length){
+    const toISO=dt=>{const y=dt.getFullYear(),m=String(dt.getMonth()+1).padStart(2,'0'),dd=String(dt.getDate()).padStart(2,'0');return y+'-'+m+'-'+dd;};
+    dataDateMin=toISO(new Date(Math.min(...dates)));
+    dataDateMax=toISO(new Date(Math.max(...dates)));
+  } else { dataDateMin=''; dataDateMax=''; }
+  const fdfEl=document.getElementById('fdf'), fdtEl=document.getElementById('fdt');
+  fdfEl.min=dataDateMin; fdfEl.max=dataDateMax; fdfEl.value='';
+  fdtEl.min=dataDateMin; fdtEl.max=dataDateMax; fdtEl.value='';
   updateDeptFilter(d);
 }
 
 function updateDeptFilter(srcData){
-  const grp=document.getElementById('fgrp').value;
-  const rows=grp?srcData.filter(r=>r.group===grp):srcData;
+  const rows=selGroups.size>0?srcData.filter(r=>selGroups.has(r.group)):srcData;
   const depts=[...new Set(rows.map(r=>r.dept))].filter(Boolean).sort((a,b)=>a.localeCompare(b,'th'));
-  const el=document.getElementById('fd'), prev=el.value;
-  el.innerHTML='<option value="">— ทั้งหมด —</option>';
-  depts.forEach(x=>{const o=document.createElement('option');o.value=o.textContent=x;el.appendChild(o);});
-  if(depts.includes(prev)) el.value=prev;
-}
-
-function onGroupChange(){
-  document.getElementById('fd').value='';
-  updateDeptFilter(allData[tab]);
-  af();
+  populateDeptMs(depts);
 }
 
 function af(){
   const q=document.getElementById('si').value.toLowerCase().trim();
-  const grp=document.getElementById('fgrp').value;
-  const dept=document.getElementById('fd').value;
   const month=document.getElementById('fm').value;
   const fdf=document.getElementById('fdf').value, fdt=document.getElementById('fdt').value;
   const from=fdf?new Date(fdf):null, to=fdt?new Date(fdt+'T23:59:59'):null;
 
   filtered=allData[tab].filter(r=>{
     if(q&&!r.name.toLowerCase().includes(q)&&!r.empId.toLowerCase().includes(q)) return false;
-    if(grp&&r.group!==grp) return false;
-    if(dept&&r.dept!==dept) return false;
+    if(selGroups.size>0&&!selGroups.has(r.group)) return false;
+    if(selDepts.size>0&&!selDepts.has(r.dept)) return false;
     if(month&&r.month!==month) return false;
     if(from&&r.dateObj&&r.dateObj<from) return false;
     if(to&&r.dateObj&&r.dateObj>to) return false;
@@ -552,9 +700,22 @@ function af(){
 }
 
 function rf(){
-  document.getElementById('si').value=''; document.getElementById('fgrp').value='';
-  updateDeptFilter(allData[tab]); document.getElementById('fd').value='';
-  document.getElementById('fm').value=''; document.getElementById('fdf').value=''; document.getElementById('fdt').value='';
+  document.getElementById('si').value='';
+  // reset กลุ่มงาน
+  selGroups.clear();
+  document.querySelectorAll('#ms-list input[type=checkbox]').forEach(c=>c.checked=false);
+  const allGEl=document.getElementById('ms-all'); if(allGEl){allGEl.checked=true;allGEl.indeterminate=false;}
+  updateMsLabel();
+  // reset สังกัด
+  selDepts.clear();
+  document.querySelectorAll('#ms-dept-list input[type=checkbox]').forEach(c=>c.checked=false);
+  const allDEl=document.getElementById('ms-dept-all'); if(allDEl){allDEl.checked=true;allDEl.indeterminate=false;}
+  updateDeptLabel();
+  updateDeptFilter(allData[tab]);
+  document.getElementById('fm').value='';
+  const fdfEl=document.getElementById('fdf'), fdtEl=document.getElementById('fdt');
+  fdfEl.min=dataDateMin; fdfEl.max=dataDateMax; fdfEl.value='';
+  fdtEl.min=dataDateMin; fdtEl.max=dataDateMax; fdtEl.value='';
   af();
 }
 
@@ -658,7 +819,7 @@ function renderSummaryTable(){
   tbody.innerHTML='';
 
   if(!groups.length){
-    tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:36px;color:var(--silver)">ไม่พบข้อมูล</td></tr>';
+    tbody.innerHTML='<tr><td colspan="4" style="text-align:center;padding:36px;color:var(--silver)">ไม่พบข้อมูล</td></tr>';
     document.getElementById('smeta').textContent='—'; return;
   }
 
@@ -680,7 +841,6 @@ function renderSummaryTable(){
       '<span class="gr-tag">🗂 '+h(g)+'</span></td>'+
       '<td class="num-cell">'+fmt(gd.days)+'</td>'+
       '<td class="num-cell">'+gd.empSet.size.toLocaleString('th-TH')+'</td>'+
-      '<td class="num-cell">'+gd.count.toLocaleString('th-TH')+'</td>'+
       '<td class="num-cell-s">'+(gd.empSet.size?gd.days/gd.empSet.size:0).toFixed(1)+'</td>';
     tbody.appendChild(gr);
 
@@ -692,7 +852,6 @@ function renderSummaryTable(){
       tr.innerHTML='<td class="sub-dept">↳ '+h(dn)+'</td>'+
         '<td class="num-cell">'+fmt(dd.days)+'</td>'+
         '<td class="num-cell-s">'+dd.empSet.size.toLocaleString('th-TH')+'</td>'+
-        '<td class="num-cell-s">'+dd.count.toLocaleString('th-TH')+'</td>'+
         '<td class="num-cell-s">'+(dd.empSet.size?dd.days/dd.empSet.size:0).toFixed(1)+'</td>';
       tbody.appendChild(tr);
     });
@@ -703,7 +862,6 @@ function renderSummaryTable(){
   tr.innerHTML='<td><strong>📊 รวมทั้งหมด</strong></td>'+
     '<td class="num-cell">'+fmt(tDays)+'</td>'+
     '<td class="num-cell">'+tEmp.size.toLocaleString('th-TH')+'</td>'+
-    '<td class="num-cell">'+tCount.toLocaleString('th-TH')+'</td>'+
     '<td class="num-cell-s">'+(tEmp.size?tDays/tEmp.size:0).toFixed(1)+'</td>';
   tbody.appendChild(tr);
 
