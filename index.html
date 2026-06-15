@@ -108,6 +108,23 @@ body{font-family:'Prompt',sans-serif;background:var(--bg);color:var(--text);min-
   margin-bottom:12px;margin-top:24px;display:flex;align-items:center;gap:10px}
 .st-line{flex:1;height:1px;background:linear-gradient(90deg,var(--gold),transparent)}
 .st-icon{width:6px;height:6px;background:var(--gold);border-radius:50%;flex-shrink:0}
+/* ── SECTION TABS ── */
+.sec-tabs-bar{display:flex;align-items:center;gap:0;margin-top:28px;margin-bottom:0;
+  background:#fff;border-radius:12px 12px 0 0;border:1px solid var(--border);border-bottom:none;
+  overflow:hidden;box-shadow:0 -2px 12px rgba(26,26,110,.05)}
+.sec-tab{font-family:inherit;font-size:.85rem;font-weight:500;padding:14px 24px;
+  border:none;border-right:1px solid var(--blight);background:var(--blight);
+  cursor:pointer;color:var(--muted);transition:all .2s;display:flex;align-items:center;gap:8px;
+  white-space:nowrap;position:relative}
+.sec-tab:last-of-type{border-right:none}
+.sec-tab:hover:not(.active){background:#f0f0fa;color:var(--navy)}
+.sec-tab.active{background:#fff;color:var(--navy);font-weight:700;border-bottom:3px solid var(--navy);margin-bottom:-1px}
+.sec-tab .stab-cnt{font-size:.65rem;padding:2px 7px;border-radius:10px;font-weight:700;
+  background:rgba(26,26,110,.08);color:var(--navy);transition:all .2s}
+.sec-tab.active .stab-cnt{background:var(--navy);color:#fff}
+.sec-content{background:#fff;border:1px solid var(--border);border-radius:0 12px 12px 12px;
+  padding:20px;box-shadow:0 4px 20px rgba(26,26,110,.08);margin-bottom:24px}
+.sec-content.sec-ind{padding:0;overflow:hidden;border-radius:0 12px 12px 12px}
 
 /* ── KPI ── */
 .kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:4px}
@@ -140,8 +157,7 @@ body{font-family:'Prompt',sans-serif;background:var(--bg);color:var(--text);min-
 .cw{position:relative;height:260px}
 
 /* ── SUMMARY TABLE ── */
-.stbl{background:#fff;border-radius:12px;padding:20px;
-  box-shadow:0 2px 16px rgba(26,26,110,.08);border:1px solid var(--border);border-top:3px solid var(--gold)}
+.stbl{background:transparent}
 .stbl-head{display:flex;align-items:center;justify-content:space-between;
   margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--blight);flex-wrap:wrap;gap:8px}
 .stbl-title{font-size:.88rem;font-weight:600;color:var(--navy);display:flex;align-items:center;gap:7px}
@@ -165,6 +181,64 @@ body{font-family:'Prompt',sans-serif;background:var(--bg);color:var(--text);min-
 .tbl-ctrl-btn{background:none;border:1px solid var(--border);color:var(--navy);font-size:.7rem;
   padding:4px 10px;border-radius:5px;cursor:pointer;font-family:inherit;transition:all .2s;font-weight:600}
 .tbl-ctrl-btn:hover{background:var(--navy);color:#fff;border-color:var(--navy)}
+/* ── CALENDAR PICKER ── */
+.cal-wrap{position:relative}
+.cal-trigger{min-width:160px!important}
+.cal-panel{position:absolute;top:calc(100% + 5px);left:0;z-index:700;background:#fff;
+  border:1.5px solid var(--navy);border-radius:10px;
+  box-shadow:0 10px 32px rgba(26,26,110,.2);padding:14px 12px 10px;
+  display:none;width:252px}
+.cal-panel.open{display:block}
+.cal-month{margin-bottom:14px}
+.cal-month-title{font-size:.78rem;font-weight:700;color:var(--navy);text-align:center;
+  margin-bottom:7px;padding-bottom:5px;border-bottom:1px solid var(--blight)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px}
+.cal-dow{font-size:.59rem;text-align:center;color:var(--muted);font-weight:700;padding:2px 0}
+.cal-day{font-size:.75rem;text-align:center;padding:5px 2px;
+  border-radius:4px;cursor:default;user-select:none;line-height:1.4}
+.cal-day.hd{cursor:pointer;color:var(--navy);font-weight:600}
+.cal-day.hd:hover{background:rgba(26,26,110,.12)}
+.cal-day.s1,.cal-day.s2{background:var(--navy)!important;color:#fff!important;font-weight:700;border-radius:4px}
+.cal-day.inr{background:rgba(26,26,110,.1);border-radius:0;color:var(--navy)}
+.cal-day.s1:not(.s2){border-radius:4px 0 0 4px}
+.cal-day.s2:not(.s1){border-radius:0 4px 4px 0}
+.cal-hint{font-size:.65rem;color:var(--silver);text-align:center;margin:2px 0 6px;min-height:14px}
+.cal-foot{display:flex;justify-content:center;padding-top:6px;border-top:1px solid var(--blight);margin-top:4px}
+.cal-clr{font-size:.71rem;color:var(--muted);cursor:pointer;padding:4px 14px;
+  border-radius:5px;border:1px solid var(--border);background:none;font-family:inherit;
+  transition:all .15s}
+.cal-clr:hover{background:var(--navy);color:#fff;border-color:var(--navy)}
+/* ── DATE TABLE ── */
+.dat-row{background:rgba(46,120,50,.05)!important}
+.dat-row td{font-weight:700;color:#1a5c1e;border-bottom:2px solid rgba(46,120,50,.18)!important}
+.dat-tag{display:inline-flex;align-items:center;gap:6px;
+  background:#1a5c1e;color:#fff;padding:3px 10px;border-radius:5px;font-size:.8rem;font-weight:700}
+.dat-toggle{background:none;border:1px solid rgba(46,120,50,.3);cursor:pointer;font-size:.7rem;
+  color:#1a5c1e;padding:2px 6px;border-radius:4px;margin-right:7px;
+  transition:all .15s;font-family:inherit}
+.dat-toggle:hover{background:#1a5c1e;color:#fff;border-color:#1a5c1e}
+.dat-grp-row{background:rgba(26,26,110,.025)!important}
+.dat-grp-row td{border-bottom:1px solid var(--blight)!important}
+.dat-grp-tag{display:inline-flex;align-items:center;gap:5px;
+  background:rgba(200,168,75,.15);color:#7a6030;padding:2px 9px;
+  border-radius:4px;font-size:.79rem;font-weight:700;border:1px solid rgba(200,168,75,.3)}
+.dat-grp-toggle{background:none;border:1px solid rgba(200,168,75,.4);cursor:pointer;font-size:.65rem;
+  color:#7a6030;padding:2px 5px;border-radius:4px;margin-right:6px;
+  transition:all .15s;font-family:inherit}
+.dat-grp-toggle:hover{background:#c8a84b;color:#fff;border-color:#c8a84b}
+.dat-dept-row td{border-bottom:1px solid var(--blight)!important;vertical-align:top}
+.name-chip{display:inline-block;background:rgba(26,26,110,.06);border:1px solid rgba(26,26,110,.12);
+  border-radius:4px;padding:2px 8px;margin:2px 3px 2px 0;font-size:.74rem;color:var(--text)}
+
+/* ── MONTHLY SUMMARY ── */
+.mth-row{background:rgba(26,26,110,.05)!important}
+.mth-row td{font-weight:700;color:var(--navy);border-bottom:2px solid var(--border)!important}
+.mth-tag{display:inline-flex;align-items:center;gap:6px;
+  background:var(--royal);color:#fff;padding:3px 10px;border-radius:5px;font-size:.8rem;font-weight:700}
+.mth-toggle{background:none;border:1px solid rgba(26,26,110,.25);cursor:pointer;font-size:.7rem;
+  color:var(--navy);padding:2px 6px;border-radius:4px;margin-right:7px;
+  transition:all .15s;font-family:inherit}
+.mth-toggle:hover{background:var(--royal);color:#fff;border-color:var(--royal)}
 .num-cell{text-align:right!important;font-weight:600;color:var(--navy)}
 .num-cell-s{text-align:right!important;color:var(--muted);font-size:.86rem}
 .total-row td{background:rgba(200,168,75,.07)!important;font-weight:700;color:var(--navy);
@@ -326,9 +400,12 @@ tbody tr:hover{background:rgba(26,26,110,.03)}
       <div class="sep"></div>
       <div class="fg">
         <span class="fl">🗓 วันที่ลา</span>
-        <input type="date" class="fd" id="fdf" onchange="af()"/>
-        <span class="fd-sep">–</span>
-        <input type="date" class="fd" id="fdt" onchange="af()"/>
+        <div class="ms-wrap cal-wrap" id="cal-wrap">
+          <button class="ms-btn cal-trigger" id="cal-btn" onclick="toggleCal(event)">
+            <span id="cal-label">— ทุกวัน —</span><span class="ms-arr">▾</span>
+          </button>
+          <div class="cal-panel" id="cal-panel"></div>
+        </div>
       </div>
       <div class="sp"></div>
       <button class="btn-r" onclick="rf()">↺ ล้าง</button>
@@ -398,57 +475,87 @@ tbody tr:hover{background:rgba(26,26,110,.03)}
       </div>
     </div>
 
-    <!-- SUMMARY TABLE -->
-    <div class="st"><span class="st-icon"></span>สรุปข้อมูลรายกลุ่มงาน<div class="st-line"></div></div>
-    <div class="stbl">
-      <div class="stbl-head">
+    <!-- SECTION TABS -->
+    <div class="sec-tabs-bar">
+      <button class="sec-tab active" id="stab-grp" onclick="showSec('grp',this)">
+        🗂 ภาพรวมกลุ่มงาน <span class="stab-cnt" id="cnt-grp">—</span>
+      </button>
+      <button class="sec-tab" id="stab-mth" onclick="showSec('mth',this)">
+        📅 รายเดือน <span class="stab-cnt" id="cnt-mth">—</span>
+      </button>
+      <button class="sec-tab" id="stab-dat" onclick="showSec('dat',this)">
+        📆 รายวันที่ <span class="stab-cnt" id="cnt-dat">—</span>
+      </button>
+    </div>
+
+    <!-- SEC: กลุ่มงาน -->
+    <div id="sec-grp" class="sec-content">
+      <div class="stbl-head" style="margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--blight)">
         <div class="stbl-title"><span class="ct-dot" style="background:var(--gold)"></span>ภาพรวมกลุ่มงาน · สังกัด · วันลา WFH</div>
         <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-          <button class="tbl-ctrl-btn" id="btnExpAll">▼ ขยายทั้งหมด</button>
-          <button class="tbl-ctrl-btn" id="btnColAll">▶ พับทั้งหมด</button>
+          <button class="tbl-ctrl-btn" id="btnExpAll">▼ ขยาย</button>
+          <button class="tbl-ctrl-btn" id="btnColAll">▶ พับ</button>
           <div class="stbl-meta" id="smeta">—</div>
         </div>
       </div>
       <div class="stbl-wrap">
         <table>
-          <thead>
-            <tr>
-              <th style="min-width:220px">กลุ่มงาน / สังกัด</th>
-              <th style="text-align:right;width:120px">ครั้ง WFH รวม</th>
-              <th style="text-align:right;width:100px">จำนวนคน</th>
-              <th style="text-align:right;width:100px">เฉลี่ย/คน</th>
-            </tr>
-          </thead>
+          <thead><tr>
+            <th style="min-width:220px">กลุ่มงาน / สังกัด</th>
+            <th style="text-align:right;width:120px">ครั้ง WFH รวม</th>
+            <th style="text-align:right;width:100px">จำนวนคน</th>
+            <th style="text-align:right;width:100px">เฉลี่ย/คน</th>
+          </tr></thead>
           <tbody id="stbody"></tbody>
         </table>
       </div>
     </div>
 
-    <!-- INDIVIDUAL TABLE -->
-    <div class="st"><span class="st-icon"></span>ข้อมูลรายบุคคล<div class="st-line"></div></div>
-    <div class="tc">
-      <div class="th-row">
-        <div class="tt"><span class="ct-dot"></span>ตารางข้อมูล Work From Home รายบุคคล</div>
-        <div class="tm" id="tmeta">—</div>
+    <!-- SEC: รายเดือน -->
+    <div id="sec-mth" class="sec-content" style="display:none">
+      <div class="stbl-head" style="margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--blight)">
+        <div class="stbl-title"><span class="ct-dot" style="background:var(--royal)"></span>ภาพรวมแต่ละเดือน · สังกัด · จำนวน WFH</div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <button class="tbl-ctrl-btn" id="btnMthExpAll">▼ ขยาย</button>
+          <button class="tbl-ctrl-btn" id="btnMthColAll">▶ พับ</button>
+          <div class="stbl-meta" id="mmeta">—</div>
+        </div>
       </div>
-      <div class="tscr">
+      <div class="stbl-wrap">
         <table>
-          <thead>
-            <tr>
-              <th style="width:40px">#</th>
-              <th>รหัสพนักงาน</th>
-              <th>ชื่อ–สกุล</th>
-              <th>กลุ่มงาน</th>
-              <th>สังกัด</th>
-              <th>เดือน</th>
-              <th>วันที่ลา</th>
-            </tr>
-          </thead>
-          <tbody id="tbody"></tbody>
+          <thead><tr>
+            <th style="min-width:220px">เดือน / สังกัด</th>
+            <th style="text-align:right;width:120px">ครั้ง WFH รวม</th>
+            <th style="text-align:right;width:100px">จำนวนคน</th>
+            <th style="text-align:right;width:100px">เฉลี่ย/คน</th>
+          </tr></thead>
+          <tbody id="mtbody"></tbody>
         </table>
       </div>
-      <div class="pag" id="pag"></div>
     </div>
+
+    <!-- SEC: รายวันที่ -->
+    <div id="sec-dat" class="sec-content" style="display:none">
+      <div class="stbl-head" style="margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--blight)">
+        <div class="stbl-title"><span class="ct-dot" style="background:#1a5c1e"></span>วันที่มีการ WFH · แยกตามสังกัด</div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <button class="tbl-ctrl-btn" id="btnDatExpAll">▼ ขยาย</button>
+          <button class="tbl-ctrl-btn" id="btnDatColAll">▶ พับ</button>
+          <div class="stbl-meta" id="dmeta">—</div>
+        </div>
+      </div>
+      <div class="stbl-wrap">
+        <table>
+          <thead><tr>
+            <th style="min-width:260px">วันที่ / สังกัด</th>
+            <th style="text-align:right;width:120px">จำนวน WFH (ครั้ง)</th>
+            <th style="text-align:right;width:100px">จำนวนคน</th>
+          </tr></thead>
+          <tbody id="dtbody"></tbody>
+        </table>
+      </div>
+    </div>
+
 
   </div>
 </div>
@@ -545,10 +652,189 @@ function switchTab(t){
 }
 function loadTab(t){tab=t;page=1;populateFilters();af();}
 
+/* ── SECTION TABS ── */
+let curSec='grp';
+function showSec(id,btn){
+  ['grp','mth','dat'].forEach(s=>{
+    const el=document.getElementById('sec-'+s);
+    if(el) el.style.display=s===id?'':'none';
+  });
+  document.querySelectorAll('.sec-tab').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  curSec=id;
+}
+function updateSecCounts(){
+  const groups=new Set(filtered.map(r=>r.group)).size;
+  const months2=new Set(filtered.map(r=>r.month)).size;
+  const days=new Set(filtered.filter(r=>r.dateObj).map(r=>r.dateStr)).size;
+  const el1=document.getElementById('cnt-grp');
+  const el2=document.getElementById('cnt-mth');
+  const el3=document.getElementById('cnt-dat');
+  if(el1) el1.textContent=groups+' กลุ่ม';
+  if(el2) el2.textContent=months2+' เดือน';
+  if(el3) el3.textContent=days+' วัน';
+}
+
 /* ── MULTI-SELECT กลุ่มงาน + สังกัด ── */
 let selGroups=new Set(); // empty = all
 let selDepts=new Set();  // empty = all
 let dataDateMin='', dataDateMax=''; // ช่วงวันที่จาก data จริง
+let calStart=null, calEnd=null;    // Date objects สำหรับ range selection
+const CAL_DOW=['อา','จ','อ','พ','พฤ','ศ','ส'];
+const MONTH_TH=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+
+/* ── CALENDAR PICKER ── */
+function toggleCal(e){
+  e.stopPropagation();
+  const p=document.getElementById('cal-panel'), b=document.getElementById('cal-btn');
+  const open=p.classList.contains('open');
+  p.classList.toggle('open',!open); b.classList.toggle('open',!open);
+  if(!open){ buildCal(); setTimeout(()=>document.addEventListener('click',closeCalOut,{once:true,capture:true}),10); }
+}
+function closeCalOut(e){
+  if(!document.getElementById('cal-wrap').contains(e.target)){
+    document.getElementById('cal-panel').classList.remove('open');
+    document.getElementById('cal-btn').classList.remove('open');
+  } else { setTimeout(()=>document.addEventListener('click',closeCalOut,{once:true,capture:true}),10); }
+}
+function buildCal(){
+  const panel=document.getElementById('cal-panel');
+  if(!dataDateMin){ panel.innerHTML='<div style="padding:16px;text-align:center;color:var(--muted);font-size:.8rem">ไม่พบข้อมูลวันที่</div>'; return; }
+  // วันที่ที่มีข้อมูลใน filtered data (หรือ allData ถ้ายังไม่ filter)
+  const dateDays=new Set(allData[tab].filter(r=>r.dateObj).map(r=>{
+    const d=r.dateObj; return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+  }));
+  const [sy,sm]=dataDateMin.split('-').map(Number);
+  const [ey,em]=dataDateMax.split('-').map(Number);
+  let html='';
+  let cy=sy,cm=sm;
+  while(cy<ey||(cy===ey&&cm<=em)){
+    html+=buildCalMonth(cy,cm,dateDays);
+    cm++; if(cm>12){cm=1;cy++;}
+  }
+  html+='<div class="cal-hint" id="cal-hint">'+(calStart?'เลือกวันสิ้นสุด (คลิกซ้ำเพื่อล้าง)':'คลิกวันเริ่มต้น')+'</div>';
+  html+='<div class="cal-foot"><button class="cal-clr" onclick="clearCal()">✕ ล้างวันที่</button></div>';
+  panel.innerHTML=html;
+  highlightCal();
+}
+function buildCalMonth(y,m,dateDays){
+  let h='<div class="cal-month"><div class="cal-month-title">'+MONTH_TH[m-1]+' '+y+'</div>';
+  h+='<div class="cal-grid">';
+  CAL_DOW.forEach(d=>h+='<div class="cal-dow">'+d+'</div>');
+  const firstDay=new Date(y,m-1,1).getDay();
+  for(let i=0;i<firstDay;i++) h+='<div></div>';
+  const total=new Date(y,m,0).getDate();
+  for(let d=1;d<=total;d++){
+    const key=y+'-'+m+'-'+d;
+    const ds=y+'-'+String(m).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+    const cls='cal-day'+(dateDays.has(key)?' hd':'');
+    h+='<div class="'+cls+'" data-d="'+ds+'" onclick="calClick(this)">'+d+'</div>';
+  }
+  h+='</div></div>'; return h;
+}
+function calClick(el){
+  if(!el.classList.contains('hd')) return;
+  const d=new Date(el.dataset.d+'T00:00:00');
+  if(!calStart||calEnd){
+    // ครั้งแรก หรือ เริ่มใหม่
+    calStart=d; calEnd=null;
+  } else {
+    // ครั้งที่สอง
+    if(d.getTime()===calStart.getTime()){ calStart=null; calEnd=null; }
+    else if(d<calStart){ calEnd=calStart; calStart=d; }
+    else { calEnd=d; }
+  }
+  highlightCal(); updateCalLabel(); af();
+  const hint=document.getElementById('cal-hint');
+  if(hint) hint.textContent=calStart&&!calEnd?'เลือกวันสิ้นสุด (คลิกซ้ำเพื่อล้าง)':calStart&&calEnd?'✓ เลือกช่วงแล้ว':'คลิกวันเริ่มต้น';
+}
+function highlightCal(){
+  document.querySelectorAll('#cal-panel .cal-day').forEach(el=>{
+    el.classList.remove('s1','s2','inr');
+    if(!el.dataset.d) return;
+    const d=new Date(el.dataset.d+'T00:00:00');
+    if(calStart&&d.getTime()===calStart.getTime()) el.classList.add('s1');
+    if(calEnd&&d.getTime()===calEnd.getTime()) el.classList.add('s2');
+    if(calStart&&calEnd&&d>calStart&&d<calEnd) el.classList.add('inr');
+  });
+}
+function updateCalLabel(){
+  const lbl=document.getElementById('cal-label');
+  if(!calStart){lbl.textContent='— ทุกวัน —'; return;}
+  const fmtD=d=>d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear();
+  lbl.textContent=calEnd?fmtD(calStart)+' – '+fmtD(calEnd):fmtD(calStart);
+}
+function clearCal(){
+  calStart=null; calEnd=null;
+  updateCalLabel();
+  highlightCal();
+  const hint=document.getElementById('cal-hint'); if(hint) hint.textContent='คลิกวันเริ่มต้น';
+  af();
+}
+
+/* ── MONTHLY SUMMARY TABLE ── */
+const mthOpen={};
+function renderMonthlyTable(){
+  const mmap={};
+  filtered.forEach(r=>{
+    const mo=r.month||'(ไม่ระบุเดือน)', d=r.dept||'(ไม่ระบุสังกัด)';
+    if(!mmap[mo])mmap[mo]={cnt:0,empSet:new Set(),depts:{}};
+    mmap[mo].cnt++; mmap[mo].empSet.add(r.empId||r.name);
+    if(!mmap[mo].depts[d])mmap[mo].depts[d]={cnt:0,empSet:new Set()};
+    mmap[mo].depts[d].cnt++; mmap[mo].depts[d].empSet.add(r.empId||r.name);
+  });
+  const months=Object.keys(mmap).sort((a,b)=>{const ai=MO.indexOf(a),bi=MO.indexOf(b);return(ai<0&&bi<0)?0:(ai<0?1:bi<0?-1:ai-bi);});
+  const tbody=document.getElementById('mtbody'); tbody.innerHTML='';
+  if(!months.length){
+    tbody.innerHTML='<tr><td colspan="4" style="text-align:center;padding:36px;color:var(--silver)">ไม่พบข้อมูล</td></tr>';
+    document.getElementById('mmeta').textContent='—'; return;
+  }
+  let tCnt=0,tEmp=new Set(),totalDepts=0;
+  months.forEach((mo,mi)=>{
+    const md=mmap[mo]; tCnt+=md.cnt; md.empSet.forEach(e=>tEmp.add(e));
+    const deptEntries=Object.entries(md.depts).sort((a,b)=>b[1].cnt-a[1].cnt);
+    totalDepts+=deptEntries.length;
+    if(mthOpen[mo]===undefined) mthOpen[mo]=true;
+    const isOpen=mthOpen[mo], mk=String(mi);
+    const gr=document.createElement('tr'); gr.className='mth-row';
+    gr.innerHTML='<td><button class="mth-toggle" data-key="'+mk+'" data-mo="'+h(mo)+'">'+(isOpen?'▼':'▶')+'</button>'+
+      '<span class="mth-tag">📅 '+h(mo)+'</span></td>'+
+      '<td class="num-cell">'+md.cnt.toLocaleString('th-TH')+'</td>'+
+      '<td class="num-cell">'+md.empSet.size.toLocaleString('th-TH')+'</td>'+
+      '<td class="num-cell-s">'+(md.empSet.size?md.cnt/md.empSet.size:0).toFixed(1)+'</td>';
+    tbody.appendChild(gr);
+    deptEntries.forEach(([dn,dd])=>{
+      const tr=document.createElement('tr'); tr.className='ms-'+mk;
+      if(!isOpen) tr.style.display='none';
+      tr.innerHTML='<td class="sub-dept">↳ '+h(dn)+'</td>'+
+        '<td class="num-cell">'+dd.cnt.toLocaleString('th-TH')+'</td>'+
+        '<td class="num-cell-s">'+dd.empSet.size.toLocaleString('th-TH')+'</td>'+
+        '<td class="num-cell-s">'+(dd.empSet.size?dd.cnt/dd.empSet.size:0).toFixed(1)+'</td>';
+      tbody.appendChild(tr);
+    });
+  });
+  // total
+  const tr=document.createElement('tr'); tr.className='total-row';
+  tr.innerHTML='<td><strong>📊 รวมทั้งหมด</strong></td>'+
+    '<td class="num-cell">'+tCnt.toLocaleString('th-TH')+'</td>'+
+    '<td class="num-cell">'+tEmp.size.toLocaleString('th-TH')+'</td>'+
+    '<td class="num-cell-s">'+(tEmp.size?tCnt/tEmp.size:0).toFixed(1)+'</td>';
+  tbody.appendChild(tr);
+  document.getElementById('mmeta').textContent=months.length+' เดือน · '+totalDepts+' สังกัด';
+  // toggle per month
+  tbody.querySelectorAll('.mth-toggle').forEach(btn=>{
+    btn.addEventListener('click',function(e){
+      e.stopPropagation();
+      const key=this.dataset.key, mo=this.dataset.mo;
+      mthOpen[mo]=!mthOpen[mo];
+      tbody.querySelectorAll('.ms-'+key).forEach(r=>r.style.display=mthOpen[mo]?'':'none');
+      this.textContent=mthOpen[mo]?'▼':'▶';
+    });
+  });
+  const bE=document.getElementById('btnMthExpAll'), bC=document.getElementById('btnMthColAll');
+  if(bE) bE.onclick=()=>months.forEach((mo,mi)=>{mthOpen[mo]=true;tbody.querySelectorAll('.ms-'+mi).forEach(r=>r.style.display='');tbody.querySelectorAll('.mth-toggle[data-mo="'+h(mo)+'"]').forEach(b=>b.textContent='▼');});
+  if(bC) bC.onclick=()=>months.forEach((mo,mi)=>{mthOpen[mo]=false;tbody.querySelectorAll('.ms-'+mi).forEach(r=>r.style.display='none');tbody.querySelectorAll('.mth-toggle[data-mo="'+h(mo)+'"]').forEach(b=>b.textContent='▶');});
+}
 
 function toggleMs(e){
   e.stopPropagation();
@@ -667,9 +953,9 @@ function populateFilters(){
     dataDateMin=toISO(new Date(Math.min(...dates)));
     dataDateMax=toISO(new Date(Math.max(...dates)));
   } else { dataDateMin=''; dataDateMax=''; }
-  const fdfEl=document.getElementById('fdf'), fdtEl=document.getElementById('fdt');
-  fdfEl.min=dataDateMin; fdfEl.max=dataDateMax; fdfEl.value='';
-  fdtEl.min=dataDateMin; fdtEl.max=dataDateMax; fdtEl.value='';
+  // reset calendar & dept
+  calStart=null; calEnd=null; updateCalLabel();
+  selDepts.clear();
   updateDeptFilter(d);
 }
 
@@ -682,8 +968,10 @@ function updateDeptFilter(srcData){
 function af(){
   const q=document.getElementById('si').value.toLowerCase().trim();
   const month=document.getElementById('fm').value;
-  const fdf=document.getElementById('fdf').value, fdt=document.getElementById('fdt').value;
-  const from=fdf?new Date(fdf):null, to=fdt?new Date(fdt+'T23:59:59'):null;
+  // calendar range
+  const from=calStart?new Date(calStart.getFullYear(),calStart.getMonth(),calStart.getDate()):null;
+  const to=calEnd?new Date(calEnd.getFullYear(),calEnd.getMonth(),calEnd.getDate(),23,59,59)
+           :calStart?new Date(calStart.getFullYear(),calStart.getMonth(),calStart.getDate(),23,59,59):null;
 
   filtered=allData[tab].filter(r=>{
     if(q&&!r.name.toLowerCase().includes(q)&&!r.empId.toLowerCase().includes(q)) return false;
@@ -695,7 +983,8 @@ function af(){
     return true;
   });
   page=1;
-  updateKPI(); updateCharts(); renderSummaryTable(); renderTable();
+  updateKPI(); updateCharts(); renderSummaryTable(); renderMonthlyTable(); renderDateTable();
+  updateSecCounts();
   document.getElementById('fcnt').textContent=filtered.length.toLocaleString('th')+' รายการ';
 }
 
@@ -713,9 +1002,7 @@ function rf(){
   updateDeptLabel();
   updateDeptFilter(allData[tab]);
   document.getElementById('fm').value='';
-  const fdfEl=document.getElementById('fdf'), fdtEl=document.getElementById('fdt');
-  fdfEl.min=dataDateMin; fdfEl.max=dataDateMax; fdfEl.value='';
-  fdtEl.min=dataDateMin; fdtEl.max=dataDateMax; fdtEl.value='';
+  calStart=null; calEnd=null; updateCalLabel();
   af();
 }
 
@@ -792,6 +1079,130 @@ function drawDept(){
 }
 
 function updateCharts(){drawMonth();drawGroup();drawDept();}
+
+/* ── DATE TABLE ── */
+const datOpen={};
+const DOW_TH=['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'];
+const MONTH_ABBR=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+
+function renderDateTable(){
+  // Build: dmap[dateStr] → { groups: { grpName → { depts: { deptName → { cnt, names[] } } } } }
+  const dmap={};
+  filtered.forEach(r=>{
+    if(!r.dateObj) return;
+    const key=r.dateStr||fmtDate(r.dateObj);
+    const grp=r.group||'(ไม่ระบุกลุ่ม)';
+    const dept=r.dept||'(ไม่ระบุสังกัด)';
+    if(!dmap[key]) dmap[key]={dateObj:r.dateObj,cnt:0,empSet:new Set(),groups:{}};
+    dmap[key].cnt++; dmap[key].empSet.add(r.empId||r.name);
+    if(!dmap[key].groups[grp]) dmap[key].groups[grp]={cnt:0,empSet:new Set(),depts:{}};
+    dmap[key].groups[grp].cnt++; dmap[key].groups[grp].empSet.add(r.empId||r.name);
+    if(!dmap[key].groups[grp].depts[dept]) dmap[key].groups[grp].depts[dept]={cnt:0,names:[]};
+    dmap[key].groups[grp].depts[dept].cnt++;
+    dmap[key].groups[grp].depts[dept].names.push(r.name||r.empId||'?');
+  });
+
+  const days=Object.entries(dmap).sort((a,b)=>a[1].dateObj-b[1].dateObj);
+  const tbody=document.getElementById('dtbody'); tbody.innerHTML='';
+  if(!days.length){
+    tbody.innerHTML='<tr><td colspan="3" style="text-align:center;padding:36px;color:var(--silver)">ไม่พบข้อมูล</td></tr>';
+    const dm=document.getElementById('dmeta'); if(dm) dm.textContent='—'; return;
+  }
+
+  days.forEach(([dateStr,dd],di)=>{
+    const d=dd.dateObj;
+    const dKey='D'+di;
+    const stableD=dateStr;
+    const label=DOW_TH[d.getDay()]+'ที่ '+d.getDate()+' '+MONTH_ABBR[d.getMonth()]+' '+(d.getFullYear()+543);
+    if(datOpen[stableD]===undefined) datOpen[stableD]=false;
+    const isDateOpen=datOpen[stableD];
+    const groupEntries=Object.entries(dd.groups).sort((a,b)=>b[1].cnt-a[1].cnt);
+
+    // Level 1: Date row
+    const dateRow=document.createElement('tr'); dateRow.className='dat-row';
+    dateRow.innerHTML='<td><button class="dat-toggle" data-stable="'+h(stableD)+'" data-dk="'+dKey+'">'+(isDateOpen?'▼':'▶')+'</button>'+
+      '<span class="dat-tag">📆 '+h(label)+'</span></td>'+
+      '<td class="num-cell">'+dd.cnt.toLocaleString('th-TH')+'</td>'+
+      '<td class="num-cell">'+dd.empSet.size.toLocaleString('th-TH')+'</td>';
+    tbody.appendChild(dateRow);
+
+    groupEntries.forEach(([grpName,gd],gi)=>{
+      const gKey='D'+di+'G'+gi;
+      const stableG=stableD+'|'+grpName;
+      if(datOpen[stableG]===undefined) datOpen[stableG]=false;
+      const isGrpOpen=datOpen[stableG];
+      const deptEntries=Object.entries(gd.depts).sort((a,b)=>b[1].cnt-a[1].cnt);
+
+      // Level 2: Group row
+      const grpRow=document.createElement('tr'); grpRow.className='dat-grp-row dtc-'+dKey;
+      if(!isDateOpen) grpRow.style.display='none';
+      grpRow.innerHTML='<td style="padding-left:28px">'+
+        '<button class="dat-grp-toggle" data-stable="'+h(stableG)+'" data-gk="'+gKey+'">'+(isGrpOpen?'▼':'▶')+'</button>'+
+        '<span class="dat-grp-tag">🗂 '+h(grpName)+'</span></td>'+
+        '<td class="num-cell">'+gd.cnt.toLocaleString('th-TH')+'</td>'+
+        '<td class="num-cell-s">'+gd.empSet.size.toLocaleString('th-TH')+'</td>';
+      tbody.appendChild(grpRow);
+
+      // Level 3: Dept row + names
+      deptEntries.forEach(([deptName,dept2])=>{
+        const deptRow=document.createElement('tr');
+        deptRow.className='dat-dept-row dtc-'+dKey+' dgc-'+gKey;
+        if(!isDateOpen||!isGrpOpen) deptRow.style.display='none';
+        const chips=dept2.names.map(n=>'<span class="name-chip">'+h(n)+'</span>').join('');
+        deptRow.innerHTML='<td style="padding-left:54px">'+
+          '<span style="color:var(--navy);font-weight:600;font-size:.85rem">↳ '+h(deptName)+'</span>'+
+          '<div style="margin-top:4px;line-height:1.8">'+chips+'</div></td>'+
+          '<td class="num-cell" style="padding-top:12px">'+dept2.cnt.toLocaleString('th-TH')+'</td>'+
+          '<td class="num-cell-s" style="padding-top:12px">'+dept2.names.length.toLocaleString('th-TH')+'</td>';
+        tbody.appendChild(deptRow);
+      });
+    });
+  });
+
+  const dm=document.getElementById('dmeta'); if(dm) dm.textContent=days.length+' วัน';
+
+  // Date toggle
+  tbody.querySelectorAll('.dat-toggle').forEach(btn=>{
+    btn.addEventListener('click',function(e){
+      e.stopPropagation();
+      const sd=this.dataset.stable, dk=this.dataset.dk;
+      datOpen[sd]=!datOpen[sd];
+      const open=datOpen[sd];
+      tbody.querySelectorAll('.dtc-'+dk).forEach(r=>{
+        if(r.classList.contains('dat-grp-row')) r.style.display=open?'':'none';
+        if(r.classList.contains('dat-dept-row')) r.style.display='none';
+      });
+      this.textContent=open?'▼':'▶';
+    });
+  });
+
+  // Group toggle
+  tbody.querySelectorAll('.dat-grp-toggle').forEach(btn=>{
+    btn.addEventListener('click',function(e){
+      e.stopPropagation();
+      const sg=this.dataset.stable, gk=this.dataset.gk;
+      datOpen[sg]=!datOpen[sg];
+      const open=datOpen[sg];
+      tbody.querySelectorAll('.dgc-'+gk).forEach(r=>r.style.display=open?'':'none');
+      this.textContent=open?'▼':'▶';
+    });
+  });
+
+  // Expand/collapse all (date level)
+  const bE=document.getElementById('btnDatExpAll'), bC=document.getElementById('btnDatColAll');
+  if(bE) bE.onclick=()=>days.forEach(([ds,],di)=>{
+    datOpen[ds]=true;
+    const dk='D'+di;
+    tbody.querySelectorAll('.dtc-'+dk+'.dat-grp-row').forEach(r=>r.style.display='');
+    tbody.querySelectorAll('.dat-toggle[data-stable="'+h(ds)+'"]').forEach(b=>b.textContent='▼');
+  });
+  if(bC) bC.onclick=()=>days.forEach(([ds,],di)=>{
+    datOpen[ds]=false;
+    const dk='D'+di;
+    tbody.querySelectorAll('.dtc-'+dk).forEach(r=>r.style.display='none');
+    tbody.querySelectorAll('.dat-toggle[data-stable="'+h(ds)+'"]').forEach(b=>b.textContent='▶');
+  });
+}
 
 /* ── SUMMARY TABLE ── */
 const grpOpen={};  // persistent collapse state: true=expanded, false=collapsed
