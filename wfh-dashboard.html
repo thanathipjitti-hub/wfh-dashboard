@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>WFH Dashboard | สถาบันวิจัยวิทยาศาสตร์และเทคโนโลยีแห่งประเทศไทย</title>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:    #1a1a6e;
+  --navy2:   #22228a;
+  --royal:   #2e2ea8;
+  --blue:    #4444c4;
+  --lavender:#8888cc;
+  --silver:  #b8b8d8;
+  --gold:    #c8a84b;
+  --gold2:   #e4c86e;
+  --gold3:   #f5dfa0;
+  --bg:      #f0f2f8;
+  --bg2:     #e8eaf4;
+  --card:    #ffffff;
+  --text:    #1a1a3e;
+  --muted:   #5a5a80;
+  --border:  #d0d0e8;
+  --blight:  #ebebf5;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Prompt',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px}
+
+/* ════ HEADER ════ */
+.header{background:var(--navy);border-bottom:3px solid var(--gold);position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 110% 50%,rgba(100,100,200,.18) 0%,transparent 60%),
+             radial-gradient(ellipse at -10% 50%,rgba(200,168,75,.06) 0%,transparent 50%);}
+.header::after{content:'';position:absolute;inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
+  background-size:32px 32px;}
+.header-inner{max-width:1440px;margin:0 auto;padding:18px 36px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:14px;position:relative;z-index:1}
+.brand{display:flex;align-items:center;gap:18px}
+/* Logo on white pill */
+.logo-wrap{
+  flex-shrink:0;background:#ffffff;border-radius:12px;
+  padding:7px 10px;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 8px rgba(0,0,0,.3)
+}
+.org-th{font-size:.75rem;font-weight:300;color:rgba(255,255,255,.7);letter-spacing:.02em;line-height:1.4;margin-bottom:2px}
+.org-title{font-size:1.45rem;font-weight:700;color:#fff;letter-spacing:-.02em;line-height:1.1}
+.org-en{font-size:.68rem;font-weight:300;color:rgba(255,255,255,.5);letter-spacing:.07em;margin-top:3px;text-transform:uppercase}
+.header-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.hbadge{border:1px solid rgba(200,168,75,.4);background:rgba(200,168,75,.08);padding:7px 14px;border-radius:8px;
+  font-size:.74rem;color:var(--gold2);display:flex;align-items:center;gap:7px;white-space:nowrap}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--gold2);flex-shrink:0;animation:blink 2.5s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1;box-shadow:0 0 4px var(--gold2)}50%{opacity:.3;box-shadow:none}}
+.year-badge{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
+  padding:7px 13px;border-radius:8px;font-size:.74rem;color:rgba(255,255,255,.7)}
+.gold-strip{background:linear-gradient(90deg,var(--navy) 0%,var(--gold) 40%,var(--gold2) 60%,var(--navy) 100%);height:2px}
+
+/* ════ TABS ════ */
+.tab-wrapper{background:#fff;box-shadow:0 2px 12px rgba(26,26,110,.1);position:sticky;top:0;z-index:200;border-bottom:2px solid var(--border)}
+.tab-inner{max-width:1440px;margin:0 auto;padding:0 36px;display:flex;align-items:center}
+.tab-btn{padding:13px 26px;font-family:inherit;font-size:.87rem;font-weight:500;border:none;background:none;cursor:pointer;
+  color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .2s;
+  display:flex;align-items:center;gap:9px;white-space:nowrap}
+.tab-btn.active{color:var(--navy);border-bottom-color:var(--navy);font-weight:700}
+.tab-btn:hover:not(.active){color:var(--text);background:var(--blight)}
+.tab-pill{font-size:.67rem;padding:2px 8px;border-radius:4px;font-weight:700;letter-spacing:.03em;text-transform:uppercase}
+.tab-btn.active .tab-pill{background:var(--gold);color:#fff}
+.tab-btn:not(.active) .tab-pill{background:var(--blight);color:var(--muted)}
+.tab-divider{margin-left:auto;font-size:.74rem;color:var(--silver);font-weight:300;white-space:nowrap;padding-right:4px}
+
+/* ════ MAIN ════ */
+.main{max-width:1440px;margin:0 auto;padding:24px 36px 56px}
+
+/* ════ FILTER BAR ════ */
+.filter-bar{background:#fff;border-radius:12px;padding:12px 18px;margin-bottom:20px;
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  box-shadow:0 2px 12px rgba(26,26,110,.07);border:1px solid var(--border);border-left:4px solid var(--navy)}
+.fg{display:flex;align-items:center;gap:7px}
+.fl{font-size:.68rem;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+.fs,.fi,.fd{font-family:inherit;font-size:.83rem;padding:7px 10px;
+  border:1.5px solid var(--border);border-radius:7px;background:#fff;color:var(--text);outline:none;transition:all .2s}
+.fs:focus,.fi:focus,.fd:focus{border-color:var(--navy);box-shadow:0 0 0 3px rgba(26,26,110,.1)}
+.fs{min-width:160px;cursor:pointer}.fi{min-width:190px}.fd{min-width:130px;cursor:pointer}
+.sep{width:1px;height:22px;background:var(--border);flex-shrink:0}
+.sp{flex:1;min-width:6px}
+.btn-r{font-family:inherit;font-size:.79rem;padding:7px 13px;background:var(--blight);border:1.5px solid var(--border);
+  border-radius:7px;cursor:pointer;color:var(--muted);transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:5px}
+.btn-r:hover{background:var(--navy);color:#fff;border-color:var(--navy)}
+.fcnt{font-size:.75rem;color:var(--navy);background:rgba(26,26,110,.06);padding:5px 10px;
+  border-radius:6px;border:1px solid rgba(26,26,110,.12);white-space:nowrap;font-weight:600}
+
+/* date range inline label */
+.fd-sep{font-size:.8rem;color:var(--muted);padding:0 2px}
+
+/* ════ SECTION TITLE ════ */
+.st{font-size:.7rem;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.1em;
+  margin-bottom:12px;margin-top:24px;display:flex;align-items:center;gap:10px}
+.st-line{flex:1;height:1px;background:linear-gradient(90deg,var(--gold),transparent)}
+.st-icon{width:6px;height:6px;background:var(--gold);border-radius:50%;flex-shrink:0}
+
+/* ════ KPI ════ */
+.kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:4px}
+@media(max-width:1200px){.kpi-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:700px){.kpi-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:440px){.kpi-grid{grid-template-columns:1fr}}
+.kpi{background:#fff;border-radius:12px;padding:18px 18px 16px;box-shadow:0 2px 16px rgba(26,26,110,.08);
+  border:1px solid var(--border);position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s;cursor:default}
+.kpi:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(26,26,110,.13)}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold2))}
+.kpi::after{content:'';position:absolute;bottom:-16px;right:-16px;width:64px;height:64px;border-radius:50%;background:var(--navy);opacity:.03}
+.kpi-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
+.kpi-ico{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;background:rgba(26,26,110,.07);flex-shrink:0}
+.kpi-num{font-size:.65rem;font-weight:700;color:var(--navy);letter-spacing:.06em;text-transform:uppercase;
+  background:rgba(200,168,75,.12);padding:3px 7px;border-radius:4px;border:1px solid rgba(200,168,75,.25);white-space:nowrap}
+.kv{font-size:1.85rem;font-weight:700;color:var(--navy);line-height:1;margin-bottom:5px}
+.kv-sm{font-size:1rem;font-weight:700;color:var(--navy);line-height:1.4;margin-bottom:5px}
+.kl{font-size:.76rem;color:var(--muted)}
+.ks{font-size:.68rem;color:var(--silver);margin-top:3px;font-weight:300}
+
+/* ════ CHARTS ════ */
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:4px}
+@media(max-width:900px){.chart-grid{grid-template-columns:1fr}}
+.cc{background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 16px rgba(26,26,110,.08);
+  border:1px solid var(--border);border-top:3px solid var(--navy)}
+.cc-head{margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--blight)}
+.ct{font-size:.88rem;font-weight:600;color:var(--navy);display:flex;align-items:center;gap:7px}
+.ct-dot{width:8px;height:8px;border-radius:2px;background:var(--gold);flex-shrink:0}
+.csub{font-size:.73rem;color:var(--muted);margin-top:4px;padding-left:15px}
+.cw{position:relative;height:260px}
+
+/* ════ TABLE ════ */
+.tc{background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 16px rgba(26,26,110,.08);
+  border:1px solid var(--border);border-top:3px solid var(--navy)}
+.th-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;
+  padding-bottom:10px;border-bottom:1px solid var(--blight);flex-wrap:wrap;gap:8px}
+.tt{font-size:.88rem;font-weight:600;color:var(--navy);display:flex;align-items:center;gap:7px}
+.tm{font-size:.75rem;color:var(--muted);background:var(--blight);padding:4px 10px;border-radius:5px}
+.tscr{overflow-x:auto;border-radius:8px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:.81rem}
+thead{background:var(--navy);position:sticky;top:0}
+th{padding:10px 13px;text-align:left;font-weight:600;color:rgba(255,255,255,.85);font-size:.69rem;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+th:first-child{color:rgba(255,255,255,.5)}
+td{padding:9px 13px;border-bottom:1px solid var(--blight);vertical-align:middle}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:nth-child(even){background:#fafafe}
+tbody tr:hover{background:rgba(26,26,110,.03)}
+.eid{font-size:.78rem;font-family:'Courier New',monospace;color:var(--muted)}
+.en{font-weight:500;color:var(--text)}
+.dtag{display:inline-block;max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  font-size:.72rem;background:rgba(26,26,110,.06);color:var(--navy);
+  padding:3px 7px;border-radius:4px;border:1px solid rgba(26,26,110,.1)}
+.mtag{font-size:.73rem;padding:3px 9px;border-radius:4px;font-weight:600;
+  background:rgba(200,168,75,.1);color:#7a6030;border:1px solid rgba(200,168,75,.25);white-space:nowrap}
+.dttag{font-size:.73rem;padding:3px 9px;border-radius:4px;font-weight:500;
+  background:rgba(46,46,168,.06);color:var(--royal);border:1px solid rgba(46,46,168,.15);white-space:nowrap}
+.db{display:inline-flex;align-items:center;justify-content:center;min-width:34px;padding:3px 9px;border-radius:4px;font-size:.78rem;font-weight:700}
+.dh{background:rgba(26,26,110,.1);color:var(--navy)}.dm{background:rgba(26,26,110,.06);color:var(--royal)}
+.dl{background:rgba(200,168,75,.1);color:#7a6030}.dz{background:var(--blight);color:var(--silver)}
+
+/* PAGINATION */
+.pag{display:flex;align-items:center;justify-content:center;gap:5px;margin-top:16px;flex-wrap:wrap}
+.pb{font-family:inherit;font-size:.78rem;padding:6px 11px;min-width:32px;border:1.5px solid var(--border);
+  background:#fff;color:var(--text);border-radius:6px;cursor:pointer;transition:all .15s;font-weight:500}
+.pb.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.pb:hover:not(:disabled):not(.active){background:var(--blight);border-color:var(--navy)}
+.pb:disabled{opacity:.3;cursor:not-allowed}
+.pi{font-size:.75rem;color:var(--muted);padding:0 3px}
+
+/* LOADING */
+.lw{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:100px 40px;gap:20px}
+.sp2{width:44px;height:44px;border:3px solid var(--blight);border-top-color:var(--navy);
+  border-right-color:var(--gold);border-radius:50%;animation:sp 0.85s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.ll{color:var(--navy);font-size:.95rem;font-weight:500}
+.ls{font-size:.78rem;color:var(--muted);margin-top:3px}
+
+/* ERROR */
+.ew{background:#fff;border-radius:12px;padding:48px;text-align:center;margin:24px 0;border-top:3px solid #dc2626}
+.ew h3{color:#dc2626;margin-bottom:10px;font-size:1.05rem}
+.ew p{color:var(--muted);font-size:.84rem;max-width:480px;margin:0 auto;line-height:1.8}
+.ew a{color:var(--navy);text-decoration:underline}
+.ew code{background:var(--blight);padding:2px 6px;border-radius:4px;font-size:.78rem;color:var(--royal)}
+
+/* FOOTER */
+.footer{background:var(--navy);border-top:2px solid var(--gold);padding:14px 36px;
+  display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap}
+.footer-text{font-size:.72rem;color:rgba(255,255,255,.5);text-align:center}
+.footer-text b{color:rgba(255,255,255,.75);font-weight:500}
+
+@media(max-width:640px){
+  .main{padding:14px 14px 40px}.header-inner{padding:16px 14px}
+  .tab-inner{padding:0 12px}.kv{font-size:1.5rem}.footer{padding:12px 16px}
+  .filter-bar{padding:10px 14px}
+}
+</style>
+</head>
+<body>
+
+<!-- ════════ HEADER ════════ -->
+<div class="header">
+  <div class="header-inner">
+    <div class="brand">
+      <!-- TISTR Logo (embedded) -->
+      <div class="logo-wrap">
+        <img src="data:image/png;base64,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" height="80" style="display:block;width:auto"/>
+      </div>
+      <div class="org-info">
+        <div class="org-th">สถาบันวิจัยวิทยาศาสตร์และเทคโนโลยีแห่งประเทศไทย</div>
+        <div class="org-title">WFH Dashboard</div>
+        <div class="org-en">Thailand Institute of Scientific and Technological Research</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="hbadge"><span class="live-dot"></span>Live Data · Google Sheets</div>
+      <div class="year-badge">ปีงบประมาณ 2568–2569</div>
+    </div>
+  </div>
+</div>
+<div class="gold-strip"></div>
+
+<!-- ════════ TABS ════════ -->
+<div class="tab-wrapper">
+  <div class="tab-inner">
+    <button class="tab-btn active" onclick="switchTab(0)" id="tab0">
+      <span>📊</span>ปีงบประมาณ 2568<span class="tab-pill">ทั้งปี</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab(1)" id="tab1">
+      <span>📅</span>ปีงบประมาณ 2569<span class="tab-pill">มี.ค.–พ.ค.</span>
+    </button>
+    <div class="tab-divider">ข้อมูล Work From Home · วว.</div>
+  </div>
+</div>
+
+<!-- ════════ MAIN ════════ -->
+<div class="main">
+
+  <!-- LOADING -->
+  <div id="loading-area">
+    <div class="lw">
+      <div class="sp2"></div>
+      <div style="text-align:center">
+        <div class="ll">กำลังโหลดข้อมูล...</div>
+        <div class="ls">ดึงข้อมูลจาก Google Sheets</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dash" style="display:none">
+
+    <!-- FILTER BAR -->
+    <div class="filter-bar">
+      <!-- ค้นหา -->
+      <div class="fg">
+        <span class="fl">🔍 ค้นหา</span>
+        <input type="text" class="fi" id="si" placeholder="ชื่อ หรือ รหัสพนักงาน..." oninput="af()"/>
+      </div>
+      <div class="sep"></div>
+      <!-- สังกัด -->
+      <div class="fg">
+        <span class="fl">🏛 สังกัด</span>
+        <select class="fs" id="fd" onchange="af()"><option value="">— ทั้งหมด —</option></select>
+      </div>
+      <div class="sep"></div>
+      <!-- เดือน -->
+      <div class="fg">
+        <span class="fl">📅 เดือน</span>
+        <select class="fs" id="fm" onchange="af()"><option value="">— ทั้งหมด —</option></select>
+      </div>
+      <div class="sep"></div>
+      <!-- วันที่ลา range -->
+      <div class="fg">
+        <span class="fl">🗓 วันที่ลา</span>
+        <input type="date" class="fd" id="fdf" onchange="af()" title="ตั้งแต่วันที่"/>
+        <span class="fd-sep">–</span>
+        <input type="date" class="fd" id="fdt" onchange="af()" title="ถึงวันที่"/>
+      </div>
+      <div class="sp"></div>
+      <button class="btn-r" onclick="rf()">↺ ล้าง</button>
+      <div class="fcnt" id="fcnt">—</div>
+    </div>
+
+    <!-- KPI -->
+    <div class="st"><span class="st-icon"></span>สรุปสถิติภาพรวม<div class="st-line"></div></div>
+    <div class="kpi-grid">
+      <!-- 1 วันรวม -->
+      <div class="kpi">
+        <div class="kpi-top">
+          <div class="kpi-ico">📅</div>
+          <span class="kpi-num">รวม</span>
+        </div>
+        <div class="kv" id="k1">—</div>
+        <div class="kl">วัน WFH ทั้งหมด (วัน)</div>
+        <div class="ks">นับจาก LEAVE_OF_DAY เท่านั้น</div>
+      </div>
+      <!-- 2 จำนวนพนักงาน -->
+      <div class="kpi">
+        <div class="kpi-top">
+          <div class="kpi-ico">👥</div>
+          <span class="kpi-num">คน</span>
+        </div>
+        <div class="kv" id="k2">—</div>
+        <div class="kl">พนักงานที่ใช้สิทธิ์ WFH</div>
+        <div class="ks" id="k2s">รวมลาทุกประเภท</div>
+      </div>
+      <!-- 3 ชม./นาที รวม -->
+      <div class="kpi">
+        <div class="kpi-top">
+          <div class="kpi-ico">⏱</div>
+          <span class="kpi-num">ชม./นาที</span>
+        </div>
+        <div style="display:flex;gap:14px;align-items:flex-end;margin-bottom:5px">
+          <div>
+            <div class="kv" id="k6h" style="font-size:1.6rem">—</div>
+            <div style="font-size:.7rem;color:var(--muted)">ชั่วโมงรวม</div>
+          </div>
+          <div style="color:var(--border);font-size:1.4rem;margin-bottom:6px">/</div>
+          <div>
+            <div class="kv" id="k6m" style="font-size:1.6rem">—</div>
+            <div style="font-size:.7rem;color:var(--muted)">นาทีรวม</div>
+          </div>
+        </div>
+        <div class="ks">สำหรับผู้ที่ลาไม่เต็มวัน</div>
+      </div>
+      <!-- 4 ช่วงวันที่ลา -->
+      <div class="kpi">
+        <div class="kpi-top">
+          <div class="kpi-ico">🗓</div>
+          <span class="kpi-num">ช่วงวันที่</span>
+        </div>
+        <div class="kv" id="k5c">—</div>
+        <div class="kl">ครั้ง (จำนวนรายการ)</div>
+        <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--blight)">
+          <div style="font-size:.75rem;color:var(--navy);font-weight:600" id="k5a">—</div>
+          <div style="font-size:.72rem;color:var(--muted);margin-top:2px" id="k5b">—</div>
+        </div>
+      </div>
+      <!-- 5 TOP สังกัด -->
+      <div class="kpi">
+        <div class="kpi-top">
+          <div class="kpi-ico">🏆</div>
+          <span class="kpi-num">TOP</span>
+        </div>
+        <div class="kv-sm" id="k4">—</div>
+        <div class="kl">สังกัดที่ WFH มากสุด</div>
+        <div class="ks" id="k4s">— วัน</div>
+      </div>
+    </div>
+
+    <!-- CHARTS -->
+    <div class="st"><span class="st-icon"></span>กราฟวิเคราะห์ข้อมูล<div class="st-line"></div></div>
+    <div class="chart-grid">
+      <div class="cc">
+        <div class="cc-head">
+          <div class="ct"><span class="ct-dot"></span>วัน WFH แยกตามเดือน</div>
+          <div class="csub">รวมจำนวนวัน WFH ต่อเดือน (LEAVE_OF_DAY)</div>
+        </div>
+        <div class="cw"><canvas id="cm"></canvas></div>
+      </div>
+      <div class="cc">
+        <div class="cc-head">
+          <div class="ct"><span class="ct-dot"></span>Top 10 สังกัด ที่ WFH มากสุด</div>
+          <div class="csub">เรียงลำดับตามจำนวนวัน WFH รวมสูงสุด</div>
+        </div>
+        <div class="cw"><canvas id="cd"></canvas></div>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="st"><span class="st-icon"></span>ข้อมูลรายบุคคล<div class="st-line"></div></div>
+    <div class="tc">
+      <div class="th-row">
+        <div class="tt"><span class="ct-dot"></span>ตารางข้อมูล Work From Home</div>
+        <div class="tm" id="tmeta">—</div>
+      </div>
+      <div class="tscr">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:42px">#</th>
+              <th>รหัสพนักงาน</th>
+              <th>ชื่อ–สกุล</th>
+              <th>สังกัด</th>
+              <th>Division</th>
+              <th>เดือน</th>
+              <th>วันที่ลา</th>
+              <th style="text-align:center;width:74px">วัน</th>
+              <th style="text-align:center;width:62px">ชม.</th>
+              <th style="text-align:center;width:62px">นาที</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+      <div class="pag" id="pag"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════ FOOTER ════════ -->
+<div class="footer">
+  <div class="footer-text">
+    <b>สถาบันวิจัยวิทยาศาสตร์และเทคโนโลยีแห่งประเทศไทย (วว.)</b> · ระบบ Dashboard ข้อมูล Work From Home
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+   JAVASCRIPT
+════════════════════════════════════ -->
+<script>
+const SHEET_ID = '1a7xD_J0_fg4OTp9MPThzgP6Llkjzyh7dbsIIHMt56sM';
+const SHEET_68 = 'ปีงบ 68';
+const SHEET_69 = 'รวม 3 เดือน';
+const PAGE_SZ  = 50;
+
+const MO = ['ตุลาคม','พฤศจิกายน','ธันวาคม','มกราคม','กุมภาพันธ์','มีนาคม',
+            'เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน'];
+
+const CHART_MONTH_FN = (i,n) => `hsl(${220+(i/Math.max(n-1,1))*50},65%,42%)`;
+const CHART_DEPT_COLORS = ['#1a1a6e','#2929a0','#3838b0','#4848c0','#5858c8',
+                           '#6868d0','#7878d8','#c8a84b','#d8b85e','#e8c870'];
+
+let allData = [[], []];
+let filtered = [];
+let tab = 0, page = 1;
+let chM = null, chD = null;
+let pendingResolve = null;
+
+/* ── parse date strings → Date (or null) ── */
+/* Handles: "DD/M/YYYY", "YYYY-MM-DD", "YYYY-MM-DD HH:mm:ss", "Date(y,m,d)" */
+function parseThDate(s) {
+  if (!s) return null;
+  s = String(s).trim();
+  // gviz internal "Date(2026,2,18)"
+  const gvizMatch = s.match(/^Date\((\d+),(\d+),(\d+)\)/);
+  if (gvizMatch) return new Date(+gvizMatch[1], +gvizMatch[2], +gvizMatch[3]);
+  // ISO: "YYYY-MM-DD" or "YYYY-MM-DD HH:mm:ss..."
+  const isoMatch = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (isoMatch) return new Date(+isoMatch[1], +isoMatch[2]-1, +isoMatch[3]);
+  // Thai/Excel: "DD/M/YYYY" or "D/M/YYYY"
+  const parts = s.split('/');
+  if (parts.length === 3) {
+    const d = parseInt(parts[0],10), m = parseInt(parts[1],10)-1, y = parseInt(parts[2],10);
+    if (!isNaN(d)&&!isNaN(m)&&!isNaN(y)) return new Date(y,m,d);
+  }
+  return null;
+}
+
+function fmtDate(dt) {
+  if (!dt) return '';
+  return dt.getDate() + '/' + (dt.getMonth()+1) + '/' + dt.getFullYear();
+}
+
+function fmtDateISO(dt) {
+  if (!dt) return '';
+  const mm = String(dt.getMonth()+1).padStart(2,'0');
+  const dd = String(dt.getDate()).padStart(2,'0');
+  return dt.getFullYear()+'-'+mm+'-'+dd;
+}
+
+/* ── JSONP ── */
+window.google = window.google || {};
+window.google.visualization = window.google.visualization || {};
+window.google.visualization.Query = window.google.visualization.Query || {};
+window.google.visualization.Query.setResponse = function(resp) {
+  if (pendingResolve) { pendingResolve(resp); pendingResolve = null; }
+};
+
+function loadGVizSheet(name) {
+  return new Promise(function(resolve, reject) {
+    pendingResolve = function(r) {
+      if (r.status === 'error') {
+        reject(new Error((r.errors&&r.errors[0]&&r.errors[0].message)||'Sheet error')); return;
+      }
+      resolve(parseTable(r.table));
+    };
+    var s = document.createElement('script');
+    s.src = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID +
+            '/gviz/tq?tqx=out:json&sheet=' + encodeURIComponent(name);
+    s.onerror = function() { pendingResolve=null; reject(new Error('โหลด Sheet ล้มเหลว: '+name)); };
+    document.head.appendChild(s);
+  });
+}
+
+function parseTable(table) {
+  if (!table || !table.rows) return [];
+  return table.rows.map(function(row) {
+    const c = row.c || [];
+    const vr = function(i) { return (c[i]&&c[i].v!=null) ? c[i].v : ''; };
+    // Date: try formatted (.f) then raw value (.v)
+    const rawDate = (c[9] && (c[9].f || c[9].v)) ? String(c[9].f||c[9].v) : '';
+    const parsedDt = parseThDate(rawDate);
+    // Format display date as DD/M/YYYY regardless of source format
+    const displayDate = parsedDt ? fmtDate(parsedDt) : rawDate;
+    return {
+      empId   : String(vr(1)||'').trim(),
+      name    : String(vr(2)||'').trim(),
+      div     : String(vr(3)||'').trim(),
+      dept    : String(vr(4)||'').trim(),
+      days    : parseFloat(vr(5)) || 0,
+      hours   : parseFloat(vr(6)) || 0,
+      minutes : parseFloat(vr(7)) || 0,
+      month   : String(vr(13)||'').trim(),
+      dateStr : displayDate,
+      dateObj : parsedDt
+    };
+  }).filter(function(r) { return r.empId || r.name; });
+}
+
+/* ── INIT ── */
+async function init() {
+  try {
+    allData[0] = await loadGVizSheet(SHEET_68);
+    allData[1] = await loadGVizSheet(SHEET_69);
+    document.getElementById('loading-area').style.display = 'none';
+    document.getElementById('dash').style.display = 'block';
+    loadTab(0);
+  } catch(e) {
+    document.getElementById('loading-area').innerHTML =
+      '<div class="ew"><h3>⚠️ ไม่สามารถโหลดข้อมูลได้</h3><p>กรุณาตรวจสอบว่า Google Sheet ถูกตั้งค่าเป็น<br/>'+
+      '<strong>"Anyone with the link → Viewer"</strong> แล้ว<br/><br/>'+
+      '<a href="https://docs.google.com/spreadsheets/d/'+SHEET_ID+'" target="_blank">👉 คลิกเพื่อเปิด Sheet</a><br/><br/>'+
+      '<code>'+(e.message||String(e))+'</code></p></div>';
+  }
+}
+
+/* ── TABS ── */
+function switchTab(t) { tab=t; page=1; document.getElementById('tab0').classList.toggle('active',t===0); document.getElementById('tab1').classList.toggle('active',t===1); loadTab(t); }
+function loadTab(t) { tab=t; page=1; populateFilters(); af(); }
+
+/* ── FILTERS ── */
+function populateFilters() {
+  const d = allData[tab];
+  const depts  = [...new Set(d.map(r=>r.dept))].filter(Boolean).sort((a,b)=>a.localeCompare(b,'th'));
+  const months = [...new Set(d.map(r=>r.month))].filter(Boolean)
+    .sort((a,b)=>{ const ai=MO.indexOf(a),bi=MO.indexOf(b); return ai-bi; });
+
+  const sel = (id,arr) => {
+    const el=document.getElementById(id);
+    el.innerHTML='<option value="">— ทั้งหมด —</option>';
+    arr.forEach(x=>{const o=document.createElement('option');o.value=o.textContent=x;el.appendChild(o);});
+  };
+  sel('fd',depts); sel('fm',months);
+  document.getElementById('si').value='';
+
+  // Set date range defaults from data
+  const dates = d.map(r=>r.dateObj).filter(Boolean);
+  if (dates.length) {
+    const mn = new Date(Math.min(...dates)), mx = new Date(Math.max(...dates));
+    document.getElementById('fdf').value = '';
+    document.getElementById('fdt').value = '';
+    document.getElementById('fdf').min = fmtDateISO(mn);
+    document.getElementById('fdf').max = fmtDateISO(mx);
+    document.getElementById('fdt').min = fmtDateISO(mn);
+    document.getElementById('fdt').max = fmtDateISO(mx);
+  }
+}
+
+function getDateFilter() {
+  const from = document.getElementById('fdf').value;
+  const to   = document.getElementById('fdt').value;
+  return {
+    from: from ? new Date(from) : null,
+    to  : to   ? new Date(to+'T23:59:59') : null
+  };
+}
+
+function af() {
+  const q     = document.getElementById('si').value.toLowerCase().trim();
+  const dept  = document.getElementById('fd').value;
+  const month = document.getElementById('fm').value;
+  const {from,to} = getDateFilter();
+
+  filtered = allData[tab].filter(r => {
+    if (q && !r.name.toLowerCase().includes(q) && !r.empId.toLowerCase().includes(q)) return false;
+    if (dept  && r.dept  !== dept)  return false;
+    if (month && r.month !== month) return false;
+    if (from && r.dateObj && r.dateObj < from) return false;
+    if (to   && r.dateObj && r.dateObj > to)   return false;
+    return true;
+  });
+  page=1;
+  updateKPI(); updateCharts(); renderTable();
+  document.getElementById('fcnt').textContent = filtered.length.toLocaleString('th')+' รายการ';
+}
+
+function rf() {
+  document.getElementById('si').value='';
+  document.getElementById('fd').value='';
+  document.getElementById('fm').value='';
+  document.getElementById('fdf').value='';
+  document.getElementById('fdt').value='';
+  af();
+}
+
+/* ── KPI ── */
+function updateKPI() {
+  const totDays = filtered.reduce((s,r)=>s+r.days,0);
+  const totHrs  = filtered.reduce((s,r)=>s+r.hours,0);
+  const totMins = filtered.reduce((s,r)=>s+r.minutes,0);
+  const emp     = new Set(filtered.map(r=>r.empId||r.name)).size;
+  // employees with days only (for avg)
+  const empWithDays = new Set(filtered.filter(r=>r.days>0).map(r=>r.empId||r.name)).size;
+  const avg = empWithDays ? totDays/empWithDays : 0;
+
+  const dm = {};
+  filtered.forEach(r=>{ if(r.dept) dm[r.dept]=(dm[r.dept]||0)+r.days; });
+  const top = Object.entries(dm).sort((a,b)=>b[1]-a[1])[0];
+  const fmt = n => n.toLocaleString('th-TH',{maximumFractionDigits:1});
+
+  document.getElementById('k1').textContent = fmt(totDays);
+  document.getElementById('k2').textContent = emp.toLocaleString('th-TH');
+  // sub-label showing breakdown
+  const hrEmp = filtered.filter(r=>r.hours>0||r.minutes>0).length;
+  document.getElementById('k2s').textContent = hrEmp > 0 ? 'รวมลาชม./นาที '+hrEmp.toLocaleString('th')+' รายการ' : 'รหัสพนักงานไม่ซ้ำ';
+  document.getElementById('k6h').textContent = fmt(totHrs);
+  document.getElementById('k6m').textContent = fmt(totMins);
+  document.getElementById('k4').textContent  = top ? top[0] : '—';
+  document.getElementById('k4s').textContent = top ? fmt(top[1])+' วัน' : '—';
+
+  // date range KPI
+  const dates = filtered.map(r=>r.dateObj).filter(Boolean);
+  if (dates.length) {
+    const mn = new Date(Math.min(...dates));
+    const mx = new Date(Math.max(...dates));
+    document.getElementById('k5c').textContent = dates.length.toLocaleString('th-TH');
+    document.getElementById('k5a').textContent = '📅 '+fmtDate(mn);
+    document.getElementById('k5b').textContent = '→ '+fmtDate(mx);
+  } else {
+    document.getElementById('k5c').textContent='—';
+    document.getElementById('k5a').textContent='ไม่มีข้อมูลวันที่';
+    document.getElementById('k5b').textContent='';
+  }
+}
+
+/* ── CHARTS ── */
+function updateCharts() { drawMonth(); drawDept(); }
+const FONT = {family:"'Prompt',sans-serif"};
+const TIP_OPTS = {backgroundColor:'#1a1a6e',titleFont:{...FONT,size:12},bodyFont:{...FONT,size:12},
+  padding:12,cornerRadius:6,callbacks:{label:c=>' '+(c.parsed.y??c.parsed.x).toLocaleString('th-TH',{maximumFractionDigits:1})+' วัน'}};
+
+function drawMonth() {
+  const bm={};
+  filtered.forEach(r=>{ if(r.month) bm[r.month]=(bm[r.month]||0)+r.days; });
+  const ents = Object.entries(bm).sort((a,b)=>{ const ai=MO.indexOf(a[0]),bi=MO.indexOf(b[0]); return(ai<0&&bi<0)?0:(ai<0?1:bi<0?-1:ai-bi); });
+  const labels=ents.map(e=>e[0]), vals=ents.map(e=>e[1]);
+  const ctx=document.getElementById('cm').getContext('2d');
+  if(chM) chM.destroy();
+  chM=new Chart(ctx,{type:'bar',data:{labels,datasets:[{label:'วัน WFH',data:vals,
+    backgroundColor:labels.map((_,i)=>CHART_MONTH_FN(i,labels.length)),borderRadius:6,borderSkipped:false,borderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:TIP_OPTS},
+      scales:{y:{grid:{color:'#ebebf5'},ticks:{font:FONT,size:11,color:'#8888aa'},beginAtZero:true},
+              x:{grid:{display:false},ticks:{font:FONT,size:10,color:'#5a5a80'}}}}});
+}
+
+function drawDept() {
+  const bd={};
+  filtered.forEach(r=>{ if(r.dept) bd[r.dept]=(bd[r.dept]||0)+r.days; });
+  const top10=Object.entries(bd).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  const labels=top10.map(x=>x[0].length>24?x[0].slice(0,22)+'…':x[0]), vals=top10.map(x=>x[1]);
+  const ctx=document.getElementById('cd').getContext('2d');
+  if(chD) chD.destroy();
+  chD=new Chart(ctx,{type:'bar',data:{labels,datasets:[{label:'วัน WFH',data:vals,
+    backgroundColor:CHART_DEPT_COLORS.slice(0,vals.length),borderRadius:5,borderSkipped:false,borderWidth:0}]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{...TIP_OPTS,callbacks:{label:c=>' '+c.parsed.x.toLocaleString('th-TH',{maximumFractionDigits:1})+' วัน'}}},
+      scales:{x:{grid:{color:'#ebebf5'},ticks:{font:FONT,size:10,color:'#8888aa'},beginAtZero:true},
+              y:{grid:{display:false},ticks:{font:FONT,size:9.5,color:'#5a5a80'}}}}});
+}
+
+/* ── TABLE ── */
+function renderTable() {
+  const start=(page-1)*PAGE_SZ;
+  const rows=filtered.slice(start,start+PAGE_SZ);
+  const tbody=document.getElementById('tbody');
+  tbody.innerHTML='';
+  if(!rows.length){
+    tbody.innerHTML='<tr><td colspan="10" style="text-align:center;padding:44px;color:var(--silver)">ไม่พบข้อมูลที่ตรงกัน</td></tr>';
+  } else {
+    rows.forEach(function(r,i){
+      const d=r.days;
+      const bc=d>=5?'dh':d>=2?'dm':d>0?'dl':'dz';
+      const displayDate=r.dateStr||'—';
+      // hour/min cells — show only if >0
+      const hCell = r.hours  > 0 ? '<span class="db dm">'+r.hours.toLocaleString('th-TH',{maximumFractionDigits:1})+'</span>' : '<span style="color:var(--silver)">—</span>';
+      const mCell = r.minutes> 0 ? '<span class="db dl">'+r.minutes.toLocaleString('th-TH',{maximumFractionDigits:0})+'</span>' : '<span style="color:var(--silver)">—</span>';
+      const tr=document.createElement('tr');
+      tr.innerHTML=
+        '<td style="color:var(--silver);font-size:.71rem">'+(start+i+1).toLocaleString()+'</td>'+
+        '<td><span class="eid">'+h(r.empId)+'</span></td>'+
+        '<td><span class="en">'+h(r.name)+'</span></td>'+
+        '<td><span class="dtag" title="'+h(r.dept)+'">'+h(r.dept)+'</span></td>'+
+        '<td style="color:var(--muted);font-size:.71rem;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+h(r.div)+'">'+h(r.div)+'</td>'+
+        '<td><span class="mtag">'+h(r.month)+'</span></td>'+
+        '<td><span class="dttag">'+h(displayDate)+'</span></td>'+
+        '<td style="text-align:center"><span class="db '+bc+'">'+(d>0?d.toLocaleString('th-TH',{maximumFractionDigits:1}):'—')+'</span></td>'+
+        '<td style="text-align:center">'+hCell+'</td>'+
+        '<td style="text-align:center">'+mCell+'</td>';
+      tbody.appendChild(tr);
+    });
+  }
+  const show=Math.min(filtered.length,start+PAGE_SZ);
+  document.getElementById('tmeta').textContent='แสดง '+show.toLocaleString()+' จาก '+filtered.length.toLocaleString()+' รายการ';
+  renderPag();
+}
+
+function renderPag() {
+  const total=Math.ceil(filtered.length/PAGE_SZ);
+  const pg=document.getElementById('pag');
+  pg.innerHTML='';
+  if(total<=1) return;
+  const btn=(label,p,active,disabled)=>{
+    const b=document.createElement('button');
+    b.className='pb'+(active?' active':'');b.innerHTML=label;b.disabled=!!disabled;
+    if(!disabled) b.onclick=()=>{page=p;renderTable();window.scrollTo({top:0,behavior:'smooth'});};
+    pg.appendChild(b);
+  };
+  btn('←',page-1,false,page===1);
+  const s=Math.max(1,page-2),e=Math.min(total,s+4);
+  if(s>1){btn('1',1);if(s>2){const sp=document.createElement('span');sp.className='pi';sp.textContent='…';pg.appendChild(sp);}}
+  for(let p=s;p<=e;p++) btn(p,p,p===page);
+  if(e<total){if(e<total-1){const sp=document.createElement('span');sp.className='pi';sp.textContent='…';pg.appendChild(sp);}btn(total,total);}
+  btn('→',page+1,false,page===total);
+  const pi=document.createElement('span');pi.className='pi';pi.textContent='หน้า '+page+' / '+total;pg.appendChild(pi);
+}
+
+function h(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+init();
+</script>
+</body>
+</html>
