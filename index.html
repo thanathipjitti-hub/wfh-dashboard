@@ -415,23 +415,23 @@ tbody tr:hover{background:rgba(26,26,110,.03)}
     <!-- KPI -->
     <div class="st"><span class="st-icon"></span>สรุปสถิติภาพรวม<div class="st-line"></div></div>
     <div class="kpi-grid">
+      <div class="kpi" style="border-top:3px solid var(--gold)">
+        <div class="kpi-top"><div class="kpi-ico">📅</div><span class="kpi-num">เดือน</span></div>
+        <div class="kv-sm" id="k-month" style="font-size:1.2rem">—</div>
+        <div class="kl">ช่วงเวลาที่แสดง</div>
+        <div class="ks">เลือกจากตัวกรองเดือน</div>
+      </div>
       <div class="kpi">
-        <div class="kpi-top"><div class="kpi-ico">📅</div><span class="kpi-num">รวม</span></div>
+        <div class="kpi-top"><div class="kpi-ico">🗓</div><span class="kpi-num">วัน</span></div>
         <div class="kv" id="k1">—</div>
-        <div class="kl">วัน WFH ทั้งหมด (ครั้ง)</div>
-        <div class="ks">นับจากวันที่ลา (1 แถว = 1 วัน)</div>
+        <div class="kl">จำนวนวันลา (WFH)</div>
+        <div class="ks">นับวันที่ไม่ซ้ำ (unique dates)</div>
       </div>
       <div class="kpi">
         <div class="kpi-top"><div class="kpi-ico">👥</div><span class="kpi-num">คน</span></div>
         <div class="kv" id="k2">—</div>
-        <div class="kl">พนักงานที่ใช้สิทธิ์ WFH</div>
+        <div class="kl">จำนวนคน (WFH)</div>
         <div class="ks">รหัสพนักงานไม่ซ้ำ</div>
-      </div>
-      <div class="kpi">
-        <div class="kpi-top"><div class="kpi-ico">📊</div><span class="kpi-num">เฉลี่ย</span></div>
-        <div class="kv" id="k3">—</div>
-        <div class="kl">ครั้ง WFH เฉลี่ยต่อคน</div>
-        <div class="ks">นับจากวันที่ลา</div>
       </div>
       <div class="kpi">
         <div class="kpi-top"><div class="kpi-ico">🗂</div><span class="kpi-num">TOP กลุ่ม</span></div>
@@ -1008,10 +1008,8 @@ function rf(){
 
 /* ── KPI ── */
 function updateKPI(){
-  // นับ 1 row = 1 วัน WFH (จาก วันที่ลา)
-  const tot=filtered.length;
   const emp=new Set(filtered.map(r=>r.empId||r.name)).size;
-  const avg=emp?tot/emp:0;
+  const uniqueDates=new Set(filtered.filter(r=>r.dateObj).map(r=>r.dateStr)).size;
   const gm={},dm={};
   filtered.forEach(r=>{
     if(r.group) gm[r.group]=(gm[r.group]||0)+1;
@@ -1020,9 +1018,12 @@ function updateKPI(){
   const topG=Object.entries(gm).sort((a,b)=>b[1]-a[1])[0];
   const topD=Object.entries(dm).sort((a,b)=>b[1]-a[1])[0];
   const fmt=n=>n.toLocaleString('th-TH',{maximumFractionDigits:1});
-  document.getElementById('k1').textContent=fmt(tot);
+  // เดือน KPI
+  const selMonth=document.getElementById('fm').value;
+  document.getElementById('k-month').textContent=selMonth||'ทุกเดือน';
+  // วัน (unique dates)
+  document.getElementById('k1').textContent=uniqueDates.toLocaleString('th-TH');
   document.getElementById('k2').textContent=emp.toLocaleString('th-TH');
-  document.getElementById('k3').textContent=avg.toFixed(1);
   document.getElementById('k4g').textContent=topG?topG[0]:'—';
   document.getElementById('k4gs').textContent=topG?fmt(topG[1])+' ครั้ง':'—';
   document.getElementById('k4').textContent=topD?topD[0]:'—';
