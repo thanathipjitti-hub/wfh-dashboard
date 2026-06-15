@@ -1148,7 +1148,12 @@ function renderDateTable(){
         const deptRow=document.createElement('tr');
         deptRow.className='dat-dept-row dtc-'+dKey+' dgc-'+gKey;
         if(!isDateOpen||!isGrpOpen) deptRow.style.display='none';
-        const chips=dept2.names.map(n=>'<span class="name-chip">'+h(n)+'</span>').join('');
+        const nameCount={};
+        dept2.names.forEach(n=>nameCount[n]=(nameCount[n]||0)+1);
+        const chips=dept2.names.map(n=>{
+          const dup=nameCount[n]>1;
+          return '<span class="name-chip"'+(dup?' style="background:rgba(220,38,38,.1);border-color:rgba(220,38,38,.35);color:#dc2626;font-weight:700" title="ลา '+nameCount[n]+' ครั้งในวันเดียวกัน"':'')+'>'+h(n)+(dup?' ×'+nameCount[n]:'')+' </span>';
+        }).join('');
         deptRow.innerHTML='<td style="padding-left:54px">'+
           '<span style="color:var(--navy);font-weight:600;font-size:.85rem">↳ '+h(deptName)+'</span>'+
           '<div style="margin-top:4px;line-height:1.8">'+chips+'</div></td>'+
