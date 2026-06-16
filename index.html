@@ -502,9 +502,7 @@ tbody tr:hover{background:rgba(26,26,110,.03)}
         <table>
           <thead><tr>
             <th style="min-width:220px">กลุ่มงาน / สังกัด</th>
-            <th style="text-align:right;width:120px">ครั้ง WFH รวม</th>
             <th style="text-align:right;width:100px">จำนวนคน</th>
-            <th style="text-align:right;width:100px">เฉลี่ย/คน</th>
           </tr></thead>
           <tbody id="stbody"></tbody>
         </table>
@@ -525,9 +523,7 @@ tbody tr:hover{background:rgba(26,26,110,.03)}
         <table>
           <thead><tr>
             <th style="min-width:220px">เดือน / สังกัด</th>
-            <th style="text-align:right;width:120px">ครั้ง WFH รวม</th>
             <th style="text-align:right;width:100px">จำนวนคน</th>
-            <th style="text-align:right;width:100px">เฉลี่ย/คน</th>
           </tr></thead>
           <tbody id="mtbody"></tbody>
         </table>
@@ -548,7 +544,6 @@ tbody tr:hover{background:rgba(26,26,110,.03)}
         <table>
           <thead><tr>
             <th style="min-width:260px">วันที่ / สังกัด</th>
-            <th style="text-align:right;width:120px">จำนวน WFH (ครั้ง)</th>
             <th style="text-align:right;width:100px">จำนวนคน</th>
           </tr></thead>
           <tbody id="dtbody"></tbody>
@@ -786,7 +781,7 @@ function renderMonthlyTable(){
   const months=Object.keys(mmap).sort((a,b)=>{const ai=MO.indexOf(a),bi=MO.indexOf(b);return(ai<0&&bi<0)?0:(ai<0?1:bi<0?-1:ai-bi);});
   const tbody=document.getElementById('mtbody'); tbody.innerHTML='';
   if(!months.length){
-    tbody.innerHTML='<tr><td colspan="4" style="text-align:center;padding:36px;color:var(--silver)">ไม่พบข้อมูล</td></tr>';
+    tbody.innerHTML='<tr><td colspan="2" style="text-align:center;padding:36px;color:var(--silver)">ไม่พบข้อมูล</td></tr>';
     document.getElementById('mmeta').textContent='—'; return;
   }
   let tCnt=0,tEmp=new Set(),totalDepts=0;
@@ -799,26 +794,20 @@ function renderMonthlyTable(){
     const gr=document.createElement('tr'); gr.className='mth-row';
     gr.innerHTML='<td><button class="mth-toggle" data-key="'+mk+'" data-mo="'+h(mo)+'">'+(isOpen?'▼':'▶')+'</button>'+
       '<span class="mth-tag">📅 '+h(mo)+'</span></td>'+
-      '<td class="num-cell">'+md.cnt.toLocaleString('th-TH')+'</td>'+
-      '<td class="num-cell">'+md.empSet.size.toLocaleString('th-TH')+'</td>'+
-      '<td class="num-cell-s">'+(md.empSet.size?md.cnt/md.empSet.size:0).toFixed(1)+'</td>';
+      '<td class="num-cell">'+md.empSet.size.toLocaleString('th-TH')+'</td>';
     tbody.appendChild(gr);
     deptEntries.forEach(([dn,dd])=>{
       const tr=document.createElement('tr'); tr.className='ms-'+mk;
       if(!isOpen) tr.style.display='none';
       tr.innerHTML='<td class="sub-dept">↳ '+h(dn)+'</td>'+
-        '<td class="num-cell">'+dd.cnt.toLocaleString('th-TH')+'</td>'+
-        '<td class="num-cell-s">'+dd.empSet.size.toLocaleString('th-TH')+'</td>'+
-        '<td class="num-cell-s">'+(dd.empSet.size?dd.cnt/dd.empSet.size:0).toFixed(1)+'</td>';
+        '<td class="num-cell-s">'+dd.empSet.size.toLocaleString('th-TH')+'</td>';
       tbody.appendChild(tr);
     });
   });
   // total
   const tr=document.createElement('tr'); tr.className='total-row';
   tr.innerHTML='<td><strong>📊 รวมทั้งหมด</strong></td>'+
-    '<td class="num-cell">'+tCnt.toLocaleString('th-TH')+'</td>'+
-    '<td class="num-cell">'+tEmp.size.toLocaleString('th-TH')+'</td>'+
-    '<td class="num-cell-s">'+(tEmp.size?tCnt/tEmp.size:0).toFixed(1)+'</td>';
+    '<td class="num-cell">'+tEmp.size.toLocaleString('th-TH')+'</td>';
   tbody.appendChild(tr);
   document.getElementById('mmeta').textContent=months.length+' เดือน · '+totalDepts+' สังกัด';
   // toggle per month
@@ -1106,7 +1095,7 @@ function renderDateTable(){
   const days=Object.entries(dmap).sort((a,b)=>a[1].dateObj-b[1].dateObj);
   const tbody=document.getElementById('dtbody'); tbody.innerHTML='';
   if(!days.length){
-    tbody.innerHTML='<tr><td colspan="3" style="text-align:center;padding:36px;color:var(--silver)">ไม่พบข้อมูล</td></tr>';
+    tbody.innerHTML='<tr><td colspan="2" style="text-align:center;padding:36px;color:var(--silver)">ไม่พบข้อมูล</td></tr>';
     const dm=document.getElementById('dmeta'); if(dm) dm.textContent='—'; return;
   }
 
@@ -1123,7 +1112,6 @@ function renderDateTable(){
     const dateRow=document.createElement('tr'); dateRow.className='dat-row';
     dateRow.innerHTML='<td><button class="dat-toggle" data-stable="'+h(stableD)+'" data-dk="'+dKey+'">'+(isDateOpen?'▼':'▶')+'</button>'+
       '<span class="dat-tag">📆 '+h(label)+'</span></td>'+
-      '<td class="num-cell">'+dd.cnt.toLocaleString('th-TH')+'</td>'+
       '<td class="num-cell">'+dd.empSet.size.toLocaleString('th-TH')+'</td>';
     tbody.appendChild(dateRow);
 
@@ -1140,7 +1128,6 @@ function renderDateTable(){
       grpRow.innerHTML='<td style="padding-left:28px">'+
         '<button class="dat-grp-toggle" data-stable="'+h(stableG)+'" data-gk="'+gKey+'">'+(isGrpOpen?'▼':'▶')+'</button>'+
         '<span class="dat-grp-tag">🗂 '+h(grpName)+'</span></td>'+
-        '<td class="num-cell">'+gd.cnt.toLocaleString('th-TH')+'</td>'+
         '<td class="num-cell-s">'+gd.empSet.size.toLocaleString('th-TH')+'</td>';
       tbody.appendChild(grpRow);
 
@@ -1158,7 +1145,6 @@ function renderDateTable(){
         deptRow.innerHTML='<td style="padding-left:54px">'+
           '<span style="color:var(--navy);font-weight:600;font-size:.85rem">↳ '+h(deptName)+'</span>'+
           '<div style="margin-top:4px;line-height:1.8">'+chips+'</div></td>'+
-          '<td class="num-cell" style="padding-top:12px">'+dept2.cnt.toLocaleString('th-TH')+'</td>'+
           '<td class="num-cell-s" style="padding-top:12px">'+dept2.names.length.toLocaleString('th-TH')+'</td>';
         tbody.appendChild(deptRow);
       });
@@ -1236,7 +1222,7 @@ function renderSummaryTable(){
   tbody.innerHTML='';
 
   if(!groups.length){
-    tbody.innerHTML='<tr><td colspan="4" style="text-align:center;padding:36px;color:var(--silver)">ไม่พบข้อมูล</td></tr>';
+    tbody.innerHTML='<tr><td colspan="2" style="text-align:center;padding:36px;color:var(--silver)">ไม่พบข้อมูล</td></tr>';
     document.getElementById('smeta').textContent='—'; return;
   }
 
@@ -1256,9 +1242,7 @@ function renderSummaryTable(){
     gr.innerHTML=
       '<td><button class="grp-toggle" data-key="'+gKey+'" data-g="'+h(g)+'">'+(isOpen?'▼':'▶')+'</button>'+
       '<span class="gr-tag">🗂 '+h(g)+'</span></td>'+
-      '<td class="num-cell">'+fmt(gd.days)+'</td>'+
-      '<td class="num-cell">'+gd.empSet.size.toLocaleString('th-TH')+'</td>'+
-      '<td class="num-cell-s">'+(gd.empSet.size?gd.days/gd.empSet.size:0).toFixed(1)+'</td>';
+      '<td class="num-cell">'+gd.empSet.size.toLocaleString('th-TH')+'</td>';
     tbody.appendChild(gr);
 
     // Dept sub-rows
@@ -1267,9 +1251,7 @@ function renderSummaryTable(){
       tr.className='gs-'+gKey;
       if(!isOpen) tr.style.display='none';
       tr.innerHTML='<td class="sub-dept">↳ '+h(dn)+'</td>'+
-        '<td class="num-cell">'+fmt(dd.days)+'</td>'+
-        '<td class="num-cell-s">'+dd.empSet.size.toLocaleString('th-TH')+'</td>'+
-        '<td class="num-cell-s">'+(dd.empSet.size?dd.days/dd.empSet.size:0).toFixed(1)+'</td>';
+        '<td class="num-cell-s">'+dd.empSet.size.toLocaleString('th-TH')+'</td>';
       tbody.appendChild(tr);
     });
   });
@@ -1277,9 +1259,7 @@ function renderSummaryTable(){
   // Grand total
   const tr=document.createElement('tr'); tr.className='total-row';
   tr.innerHTML='<td><strong>📊 รวมทั้งหมด</strong></td>'+
-    '<td class="num-cell">'+fmt(tDays)+'</td>'+
-    '<td class="num-cell">'+tEmp.size.toLocaleString('th-TH')+'</td>'+
-    '<td class="num-cell-s">'+(tEmp.size?tDays/tEmp.size:0).toFixed(1)+'</td>';
+    '<td class="num-cell">'+tEmp.size.toLocaleString('th-TH')+'</td>';
   tbody.appendChild(tr);
 
   document.getElementById('smeta').textContent=groups.length+' กลุ่มงาน · '+totalDepts+' สังกัด';
