@@ -1107,7 +1107,7 @@ function openDrillDown(type,label,rawLabel){
     const people=new Set(rows.map(r=>r.empId||r.name).filter(Boolean));
     const dates=new Set(rows.map(r=>normDK(r)).filter(Boolean));
     title=`เดือน ${rawLabel}`;
-    statHtml=`<div class="dd-stat"><div class="dd-stat-n">${people.size}</div><div class="dd-stat-l">👥 คน</div></div><div class="dd-stat"><div class="dd-stat-n">${dates.size}</div><div class="dd-stat-l">📅 วัน</div></div><div class="dd-stat"><div class="dd-stat-n">${rows.length}</div><div class="dd-stat-l">📋 รายการ</div></div>`;
+    statHtml=`<div class="dd-stat"><div class="dd-stat-n">${people.size}</div><div class="dd-stat-l">👥 คน</div></div><div class="dd-stat"><div class="dd-stat-n">${dates.size}</div><div class="dd-stat-l">📅 วัน</div></div><div class="dd-stat"><div class="dd-stat-n">${rows.length}</div><div class="dd-stat-l">📋 ครั้ง</div></div>`;
     const _bpd={};rows.forEach(r=>{const k=r.name||r.empId;const dk=normDK(r);if(k&&dk){if(!_bpd[k])_bpd[k]=new Set();_bpd[k].add(dk);}});const byPerson=Object.fromEntries(Object.entries(_bpd).map(([k,s])=>[k,s.size]));
     chips=Object.entries(byPerson).sort((a,b)=>b[1]-a[1]).map(([n,d])=>`<span class="dd-chip">👤 ${h(n)}<span class="dd-chip-days">${d} วัน</span></span>`);
   } else if(type==='person'){
@@ -1115,7 +1115,7 @@ function openDrillDown(type,label,rawLabel){
     const dates=new Set(rows.map(r=>normDK(r)).filter(Boolean));
     const totalDays=dates.size;
     title=rawLabel;
-    statHtml=`<div class="dd-stat"><div class="dd-stat-n">${totalDays}</div><div class="dd-stat-l">📅 วัน WFH</div></div><div class="dd-stat"><div class="dd-stat-n">${rows.length}</div><div class="dd-stat-l">📋 รายการ</div></div><div class="dd-stat"><div class="dd-stat-n">${rows[0]?.dept||'—'}</div><div class="dd-stat-l">🏛 สังกัด</div></div>`;
+    statHtml=`<div class="dd-stat"><div class="dd-stat-n">${totalDays}</div><div class="dd-stat-l">📅 วัน WFH</div></div><div class="dd-stat"><div class="dd-stat-n">${rows.length}</div><div class="dd-stat-l">📋 ครั้ง</div></div><div class="dd-stat"><div class="dd-stat-n">${rows[0]?.dept||'—'}</div><div class="dd-stat-l">🏛 สังกัด</div></div>`;
     chips=[...dates].sort().map(d=>`<span class="dd-chip">📅 ${h(d)}</span>`);
   } else if(type==='group'){
     rows=filtered.filter(r=>r.div===rawLabel);
@@ -1339,7 +1339,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDrillDown();cl
         </div>
         <div class="wfh-stat green">
           <span class="wfh-stat-num" id="hs-records">—</span>
-          <span class="wfh-stat-lbl">📋 รายการ</span>
+          <span class="wfh-stat-lbl">📋 ครั้ง</span>
         </div>
         <div class="wfh-stat sky">
           <span class="wfh-stat-num" id="hs-months">—</span>
@@ -1366,7 +1366,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDrillDown();cl
       <select class="fs" id="fdate" onchange="af()"><option value="">— ทุกวัน —</option></select>
       <div class="fsp"></div>
       <button class="fbtn" onclick="rf()">↺ ล้าง</button>
-      <div class="fcnt" id="fcnt">— รายการ</div>
+      <div class="fcnt" id="fcnt">— ครั้ง</div>
     </div>
 
     <!-- KPI -->
@@ -1439,7 +1439,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDrillDown();cl
         <div class="cc-head">
           <div class="cc-head-left">
             <div class="ct"><div class="ct-dot"></div>วัน WFH แยกตามเดือน</div>
-            <div class="csub">รวมจำนวนวัน WFH ต่อเดือน</div>
+            <div class="csub">รวมจำนวนวัน WFH ต่อเดือน <span id="badge-month-cnt" style="margin-left:8px;background:rgba(200,168,75,.15);color:#A07820;border:1px solid rgba(200,168,75,.35);border-radius:20px;padding:2px 10px;font-size:.72rem;font-weight:700;display:inline-block">—</span></div>
           </div>
           <div class="cc-badge" id="badge-month">—</div>
         </div>
@@ -2210,7 +2210,7 @@ function af(){
   });
   updateCascadeFilters();
   updateKPI();updateCharts();renderSummary();updateHero();
-  document.getElementById('fcnt').textContent=filtered.length.toLocaleString('th')+' รายการ';
+  document.getElementById('fcnt').textContent=filtered.length.toLocaleString('th')+' ครั้ง';
 }
 function rf(){document.getElementById('si').value='';['ms-fdiv','ms-fd','ms-fm'].forEach(clearMS);document.getElementById('fdate').value='';af();}
 
@@ -2298,7 +2298,9 @@ function drawMonth(){
       onClick:(e,els)=>{if(!els.length)return;const i=els[0].index;openDrillDown('month',labels[i],labels[i]);},
     }
   });
+  const totalTimes=filtered.length;
   document.getElementById('badge-month').textContent=`${labels.length} เดือน · ${new Set(filtered.map(r=>normDK(r)).filter(Boolean)).size} วัน`;
+  const bcnt=document.getElementById('badge-month-cnt');if(bcnt)bcnt.textContent=`รวม ${totalTimes.toLocaleString('th-TH')} ครั้ง`;
 }
 
 function drawPeople(){
