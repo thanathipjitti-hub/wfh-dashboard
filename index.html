@@ -2132,6 +2132,7 @@ function loadTab(t){
 
 /* ═══ FILTERS ═══ */
 function populateFilters(){
+  /* initial populate — reset all, build from full year data */
   const d=allData[Math.min(tab,1)];
   const divs=[...new Set(d.map(r=>r.div))].filter(Boolean).sort((a,b)=>a.localeCompare(b,'th'));
   const depts=[...new Set(d.map(r=>r.dept))].filter(Boolean).sort((a,b)=>a.localeCompare(b,'th'));
@@ -2139,11 +2140,59 @@ function populateFilters(){
   const dates=[...new Set(d.map(r=>normDK(r)).filter(Boolean))].sort((a,b)=>{
     const pa=parseThDate(a),pb=parseThDate(b);return pa&&pb?pa-pb:0;
   });
-  const sel=(id,arr)=>{const el=document.getElementById(id);el.innerHTML='<option value="">— ทั้งหมด —</option>';arr.forEach(x=>{const o=document.createElement('option');o.value=o.textContent=x;el.appendChild(o);});};
   const selDate=(id,arr)=>{const el=document.getElementById(id);el.innerHTML='<option value="">— ทุกวัน —</option>';arr.forEach(x=>{const o=document.createElement('option');o.value=o.textContent=x;el.appendChild(o);});};
   buildMS('ms-fdiv',divs);buildMS('ms-fd',depts);buildMS('ms-fm',months);selDate('fdate',dates);
   document.getElementById('si').value='';
 }
+
+/* cascade: rebuild each filter's options based on all OTHER active filters */
+function updateCascadeFilters(){
+  const src=allData[Math.min(tab,1)];
+  const q=document.getElementById('si').value.toLowerCase().trim();
+  const selDivs=getMS('ms-fdiv');
+  const selDepts=getMS('ms-fd');
+  const selMonths=getMS('ms-fm');
+  const selDate=document.getElementById('fdate').value;
+
+  function partial(exclude){
+    return src.filter(r=>{
+      if(q&&!r.name.toLowerCase().includes(q)&&!r.empId.toLowerCase().includes(q))return false;
+      if(exclude!=='div'&&selDivs.length&&!selDivs.includes(r.div))return false;
+      if(exclude!=='dept'&&selDepts.length&&!selDepts.includes(r.dept))return false;
+      if(exclude!=='month'&&selMonths.length&&!selMonths.includes(r.month))return false;
+      if(exclude!=='date'&&selDate&&normDK(r)!==selDate&&r.dateStr!==selDate)return false;
+      return true;
+    });
+  }
+
+  const availDivs=[...new Set(partial('div').map(r=>r.div))].filter(Boolean).sort((a,b)=>a.localeCompare(b,'th'));
+  const availDepts=[...new Set(partial('dept').map(r=>r.dept))].filter(Boolean).sort((a,b)=>a.localeCompare(b,'th'));
+  const availMonths=[...new Set(partial('month').map(r=>r.month))].filter(Boolean).sort((a,b)=>{const ai=MO.indexOf(a),bi=MO.indexOf(b);return ai-bi;});
+  const availDates=[...new Set(partial('date').map(r=>normDK(r)).filter(Boolean))].sort((a,b)=>{
+    const pa=parseThDate(a),pb=parseThDate(b);return pa&&pb?pa-pb:0;
+  });
+
+  /* rebuild multi-select preserving current valid selections */
+  function rebuildMS(id,items,curSel){
+    const list=document.getElementById(id+'-list');
+    if(!list)return;
+    list.innerHTML=items.map(v=>`<label class="ms-item"><input type="checkbox" value="${h(v)}"${curSel.includes(v)?' checked':''} onchange="onMS('${id}')"><span>${h(v)}</span></label>`).join('');
+    const valid=curSel.filter(v=>items.includes(v));
+    const lbl=document.getElementById(id+'-lbl');
+    if(lbl)lbl.textContent=valid.length===0?'— ทั้งหมด —':valid.length===1?valid[0]:`${valid.length} รายการ`;
+  }
+  rebuildMS('ms-fdiv',availDivs,selDivs);
+  rebuildMS('ms-fd',availDepts,selDepts);
+  rebuildMS('ms-fm',availMonths,selMonths);
+
+  /* rebuild date dropdown preserving selection if still valid */
+  const fdateEl=document.getElementById('fdate');
+  const curDate=fdateEl.value;
+  fdateEl.innerHTML='<option value="">— ทุกวัน —</option>';
+  availDates.forEach(x=>{const o=document.createElement('option');o.value=o.textContent=x;fdateEl.appendChild(o);});
+  fdateEl.value=availDates.includes(curDate)?curDate:'';
+}
+
 function af(){
   const q=document.getElementById('si').value.toLowerCase().trim();
   const divs=getMS('ms-fdiv');
@@ -2159,6 +2208,7 @@ function af(){
     if(date&&normDK(r)!==date&&r.dateStr!==date)return false;
     return true;
   });
+  updateCascadeFilters();
   updateKPI();updateCharts();renderSummary();updateHero();
   document.getElementById('fcnt').textContent=filtered.length.toLocaleString('th')+' รายการ';
 }
